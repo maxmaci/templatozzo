@@ -1,0 +1,230 @@
+% Set left and right margins to equal ratio
+\setlrmargins{*}{*}{1}
+\checkandfixthelayout
+
+% Rules
+\newcommand{\thinRule}{\rule{\textwidth}{0.25pt}}
+
+% Customize heading appearances
+% Define styles
+\newcommand{\partSize}{\Huge}
+\newcommand{\partStyle}{\lsstyle\scshape}
+\newcommand{\chapterSize}{\Huge}
+\newcommand{\chapterStyle}{\lsstyle\scshape}
+\newcommand{\chapterAfter}{\vspace*{3ex}\thinRule}
+\newcommand{\sectionSize}{\large}
+\newcommand{\sectionStyle}{\lsstyle\scshape\MakeTextLowercase}
+\newcommand{\subsectionSize}{\normalfont}
+\newcommand{\subsectionStyle}{\itshape}
+\newcommand{\subsubsectionSize}{\normalfont}
+\newcommand{\subsubsectionStyle}{}
+\newlength{\partNumSizePt}
+\setlength{\partNumSizePt}{60pt}
+\newlength{\chapterNumSizePt}
+\setlength{\chapterNumSizePt}{60pt}
+\newcommand{\partNumSize}{%
+	\fontsize{\partNumSizePt}{1.2\partNumSizePt}\selectfont%
+}
+\newcommand{\partNumStyle}{\partChapterNumColor}
+\newcommand{\chapterNumSize}{%
+	\fontsize{\chapterNumSizePt}{1.2\chapterNumSizePt}\selectfont%
+}
+\newcommand{\chapterNumStyle}{\partChapterNumColor}
+% Customize parts
+\renewcommand{\partnamefont}{\partSize\partStyle}
+\renewcommand{\partnumfont}{\partNumSize\partNumStyle}
+\renewcommand{\printpartname}{}
+\renewcommand{\printparttitle}[1]{%
+	\normalfont\normalcolor\partnamefont #1
+}
+% Customize chapters
+\makeatletter
+\setlength{\beforechapskip}{30pt}
+\renewcommand*{\chapterheadstart}{\vspace*{\beforechapskip}}
+\setlength{\afterchapskip}{3ex}
+\setlength{\midchapskip}{3ex}
+\renewcommand*{\chapnamefont}{%
+	\Large\flushright\chapterStyle\partChapterNumColor%
+}
+\renewcommand*{\chapnumfont}{\chapterNumSize\chapterNumStyle}
+\renewcommand*{\chaptitlefont}{%
+	\normalfont\flushleft\normalcolor\chapterSize\chapterStyle%
+}
+\renewcommand*{\printchaptername}{%
+	\chapnamefont\MakeTextLowercase{\@chapapp}%
+}
+\renewcommand*{\chapternamenum}{\quad}
+\renewcommand*{\printchapternum}{%
+	\chapnumfont\textls[-75]{\thechapter}%
+}
+\renewcommand*{\printchaptertitle}[1]{%
+	\chaptitlefont #1
+	\chapterAfter
+}
+\makeatother
+% Customize sections and subsections
+\setsecnumformat{\csname my#1\endcsname\quad}
+\setsecheadstyle{\sectionSize\sectionStyle}
+\newcommand{\mysection}{{\thesection}}
+\setsubsecheadstyle{\subsectionSize\subsectionStyle}
+\newcommand{\mysubsection}{{\normalfont\subsectionSize\thesubsection}}
+\setsubsubsecheadstyle{\subsubsectionSize\subsubsectionStyle}
+\newcommand{\mysubsubsection}{{\normalfont\subsubsectionSize\thesubsubsection}}
+
+% Customize "Table of ..." appearance
+% Customize headings
+\newcommand{\renewPrintXTitle}[1]{%
+	\renewcommand{#1}[1]{%
+		\printchaptertitle{##1}%
+	}%
+}
+\renewPrintXTitle{\printtoctitle}
+\renewPrintXTitle{\printlottitle}
+\renewPrintXTitle{\printloftitle}
+% Customize ToC headings
+\renewcommand{\cftpartfont}{\partChapterNumColor\partStyle}
+\renewcommand{\cftchapterfont}{\chapterStyle}
+\renewcommand{\cftsectionfont}{}
+\renewcommand{\cftsubsectionfont}{}
+\renewcommand{\cftfigurefont}{}
+\renewcommand{\cfttablefont}{}
+%\renewcommand{\cftlstlistingfont}{}
+% Increase number width
+\newlength{\cftNumWidthIncrease}
+\setlength{\cftNumWidthIncrease}{0.25em}
+\addtolength{\cftpartnumwidth}{\cftNumWidthIncrease}
+\addtolength{\cftchapternumwidth}{\cftNumWidthIncrease}
+\addtolength{\cftsectionindent}{\cftNumWidthIncrease}
+\addtolength{\cftsectionnumwidth}{0.5em}
+\addtolength{\cftsubsectionindent}{\cftNumWidthIncrease}
+\addtolength{\cftsubsectionnumwidth}{0.5em}
+% No leader dots
+\renewcommand*{\cftpartdotsep}{\cftnodots}
+\renewcommand*{\cftchapterdotsep}{\cftnodots}
+\renewcommand*{\cftsectiondotsep}{\cftnodots}
+\renewcommand*{\cftsubsectiondotsep}{\cftnodots}
+\renewcommand*{\cftfiguredotsep}{\cftnodots}
+\renewcommand*{\cfttabledotsep}{\cftnodots}
+%\renewcommand*{\cftlstlistingdotsep}{\cftnodots}
+% Set page numbers immediately after entry text
+\newcommand{\tocEntryPageSep}{\hspace{1em}}
+\renewcommand{\cftpartleader}{\tocEntryPageSep}
+\renewcommand{\cftpartafterpnum}{\cftparfillskip}
+\renewcommand{\cftchapterleader}{\tocEntryPageSep}
+\renewcommand{\cftchapterafterpnum}{\cftparfillskip}
+\renewcommand{\cftsectionleader}{\tocEntryPageSep}
+\renewcommand{\cftsectionafterpnum}{\cftparfillskip}
+\renewcommand{\cftsubsectionleader}{\tocEntryPageSep}
+\renewcommand{\cftsubsectionafterpnum}{\cftparfillskip}
+\renewcommand{\cftfigureleader}{\tocEntryPageSep}
+\renewcommand{\cftfigureafterpnum}{\cftparfillskip}
+\renewcommand{\cfttableleader}{\tocEntryPageSep}
+\renewcommand{\cfttableafterpnum}{\cftparfillskip}
+%\renewcommand{\cftlstlistingleader}{\tocEntryPageSep}
+%\renewcommand{\cftlstlistingafterpnum}{\cftparfillskip}
+% Customize page numbers
+\newcommand{\tocPageStyle}{\tocPageColor}
+\renewcommand{\cftpartpagefont}{\tocPageStyle}
+\renewcommand{\cftchapterpagefont}{\tocPageStyle}
+\renewcommand{\cftsectionpagefont}{\tocPageStyle}
+\renewcommand{\cftsubsectionpagefont}{\tocPageStyle}
+\renewcommand{\cftfigurepagefont}{\tocPageStyle}
+\renewcommand{\cfttablepagefont}{\tocPageStyle}
+%\renewcommand{\cftlstlistingpagefont}{\tocPageStyle}
+
+% Fix "List of Listings" appearance (make it coherent with other listings)
+\renewcommand{\lstlistlistingname}{List of Listings}
+
+% Abstract
+% Remove indents around abstract text
+\setlength{\absleftindent}{0pt}
+\setlength{\absrightindent}{0pt}
+% Change font size to conform with the rest of the document text
+\renewcommand{\abstracttextfont}{\normalsize}
+
+% Customize headers and footers
+\newcommand{\hfTextSize}{\footnotesize}
+\newcommand{\headTextStyle}{\lsstyle\scshape\MakeTextLowercase}
+\nouppercaseheads
+\makeevenhead{headings}%
+{\hfTextSize\thepage}%
+{}%
+{\hfTextSize\headTextStyle\leftmark}
+\makeoddhead{headings}%
+{\hfTextSize\headTextStyle\rightmark}%
+{}%
+{\hfTextSize\thepage}
+
+% Set 'headings' as page style
+\pagestyle{headings}
+% Clear style for title page (no header nor footer)
+\makepagestyle{titlepage}
+
+% Use numbering down until and including subsubsections
+\setsecnumdepth{subsubsection}
+
+% Set ToC to include subsections
+\setcounter{tocdepth}{2}
+
+% Customize captions
+\newcommand{\captionSize}{\small}
+\newcommand{\captionStyle}{\scshape}
+\newcommand{\captionWidthRatio}{0.9}
+\captionnamefont{\captionSize\captionStyle}
+\captiontitlefont{\captionSize}
+\captiondelim{ -- }
+\captiontitlefinal{.}
+\changecaptionwidth
+\captionwidth{\captionWidthRatio\textwidth}
+
+% Customize drop caps
+\setcounter{DefaultLines}{2}
+\renewcommand{\LettrineFontHook}{\dropCapColor}
+\renewcommand{\DefaultFindent}{0pt}
+\renewcommand{\DefaultNindent}{0pt}
+
+% Do not use old-style numbers for typewriter fonts
+\renewcommand{\ttdefault}{jkptt}
+\normalfont
+
+% Redefine date/time format
+\newdateformat{dashdate}{%
+	\THEYEAR-\twodigit{\THEMONTH}-\twodigit{\THEDAY}%
+}
+\renewcommand{\timeseparator}{:}
+\settimeformat{hhmmsstime}
+
+% Make URLs in bibliography entries smaller
+\AtBeginBibliography{\def\UrlFont{\small\ttfamily}}
+
+% Define colors
+\newcommand{\titleColor}{\color[rgb]{0.616, 0.0627, 0.176}}
+\newcommand{\partChapterNumColor}{\titleColor}
+\newcommand{\dropCapColor}{\titleColor}
+\newcommand{\tocPageColor}{\color[rgb]{0.0980, 0.329, 0.651}}
+%\newcommand{\codeBackgroundColor}{\color[rgb]{0.95, 0.95, 0.95}}
+%\newcommand{\codeKeywordsColor}{\color[rgb]{0.498, 0.557, 0.167}}
+%\newcommand{\codeCommentsColor}{\color[rgb]{0.251, 0.275, 0.086}}
+%\newcommand{\warningColor}{\color[rgb]{1.0, 0.0, 0.0}}
+%\newcommand{\todoColor}{\color[rgb]{1.0, 0.0, 0.0}}
+
+%\definecolor{reddo}{rgb}{0.616, 0.0627, 0.176 }
+%\definecolor{redsalsa}{HTML}{F94144}
+%\definecolor{orangered}{HTML}{F3722C}
+%\definecolor{yelloworange}{HTML}{F8961E}
+%\definecolor{byc}{HTML}{F9AF37}
+%\definecolor{pistachio}{HTML}{90BE6D}
+%\definecolor{platinum}{HTML}{E5E5E5}
+%\definecolor{CGblue}{HTML}{277DA1}
+%\definecolor{ceruleancrayola}{HTML}{00B4D8}
+%\definecolor{pumpkin}{HTML}{FF6D00}
+%\definecolor{darkdarkred}{HTML}{8D0801}
+%\definecolor{zomp}{HTML}{43AA8B}
+%\definecolor{yellowcrayola}{HTML}{F9C74F}
+%\definecolor{sapphireblue}{HTML}{1F617D}
+%\definecolor{forestgreencrayola}{HTML}{6AB47C}
+%\definecolor{queenblue}{HTML}{577590}
+%\definecolor{charcoal}{HTML}{163B4A}
+%\definecolor{violetryb}{HTML}{822FAF}
+%\definecolor{cadetblue}{HTML}{4d908e}
+%\definecolor{codegray}{rgb}{0.27, 0.25, 0.27}

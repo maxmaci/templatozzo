@@ -1,0 +1,1417 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{theoremozzo}[2022/11/17 version 1.0]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    REQUIRED PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% American Mathematical Society packages %%%
+
+% Provides a slew of new math-display environment, e.g. multiline equations, aligned equations and non-numbered equation of packages.
+%\RequirePackage{amsmath}
+% Provides a slew of new useful symbols for math and non-math uses.
+%\RequirePackage{amssymb}
+% Provides a better version of \newtheorem for creating theorem-like environments.
+\RequirePackage{amsthm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Typesetting %%%
+
+% Provides a "multicols" environment which typesets text in multiple columns.
+\RequirePackage{multicol}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Graphics, diagrams and color %%%
+
+% Provides easy driver-independent access to several kinds of color tints, shades, tones, and mixes of arbitrary colors
+
+\RequirePackage[rgb,hyperref,dvipsnames]{xcolor}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Environment and theorems %%%
+
+% Provides an environment for coloured and framed text boxes with a heading line. (theoremozzo)
+\RequirePackage[most]{tcolorbox}
+% Provides framed environments that can split at page boundaries. (theoremozzo)
+\RequirePackage[framemethod=default]{mdframed}
+% Provides several packages for commonly-needed support for typesetting theorems. (theoremozzo)
+\RequirePackage{thmtools}
+% Enables the user to typeset programs (programming code)
+\RequirePackage{listings}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% LaTeX programming %%%
+
+% Provides programming facilities geared primarily towards LATEX class and package authors. (Theoremozzo)
+\RequirePackage{etoolbox}
+% Provides a high-level interface for producing document-level commands and parsing
+\RequirePackage{xparse}
+% Provides macros manipulating strings of tokens
+\RequirePackage{xstring}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Hyperlinks %%%
+
+% Handle cross-referencing commands in LaTeX to produce hypertext links in the document
+% NOTE: Always load hyperref package last in the main document and not here!
+%\RequirePackage{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    COLORLIST
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{reddo}{rgb}{0.616, 0.0627, 0.176 }
+\definecolor{redsalsa}{HTML}{F94144}
+\definecolor{orangered}{HTML}{F3722C}
+\definecolor{yelloworange}{HTML}{F8961E}
+\definecolor{byc}{HTML}{F9AF37}
+\definecolor{pistachio}{HTML}{90BE6D}
+\definecolor{platinum}{HTML}{E5E5E5}
+\definecolor{CGblue}{HTML}{277DA1}
+\definecolor{ceruleancrayola}{HTML}{00B4D8}
+\definecolor{pumpkin}{HTML}{FF6D00}
+\definecolor{darkdarkred}{HTML}{8D0801}
+\definecolor{zomp}{HTML}{43AA8B}
+\definecolor{yellowcrayola}{HTML}{F9C74F}
+\definecolor{sapphireblue}{HTML}{1F617D}
+\definecolor{forestgreencrayola}{HTML}{6AB47C}
+\definecolor{queenblue}{HTML}{577590}
+\definecolor{charcoal}{HTML}{163B4A}
+\definecolor{violetryb}{HTML}{822FAF}
+\definecolor{cadetblue}{HTML}{4d908e}
+\definecolor{codegray}{rgb}{0.27, 0.25, 0.27}
+\definecolor{yellowpastellow}{HTML}{ECDF09}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    GLOBAL TOGGLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% These toggles are used for the list of theorems and definitions to write the chapter.
+
+\newtoggle{noDefinition}
+\newtoggle{noTheorem}
+\newtoggle{AppendixChapters}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    LABEL COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% They provide an easy way to enable the aforementioned toggles in each chapters
+
+% Chapter
+\newcommand{\labelChapter}[1]{%
+	% #1 = label
+	\label{chap:#1}%
+	\toggletrue{noDefinition}
+	\toggletrue{noTheorem}
+}
+
+% Appendix
+\newcommand{\labelAppendix}[1]{%
+	% #1 = label
+	\label{appen:#1}%
+	\toggletrue{AppendixChapters}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    COMMON COMMANDS, COLOR BOX AND THEOREM STYLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Common commands %%%
+
+% check if the optional name argument is specified: if true, then the title of the environment becomes ENVNAME X.X.X. - NAME
+\makeatletter
+
+\newcommand{\NOTEifnotblank}{%
+	\expandafter\getreal@NOTE\NOTE\@nil
+}
+\def\getreal@NOTE\if=#1=#2\@nil{\ifblank{#1}{\thmpunct}{\ \  \unskip\textnormal{\ }(#1).}}
+
+%% check if the optional name argument is specified: if true, then the title of the environment is written in the list of theorems etc.
+\newcommand{\NOTEtitleifnotblank}{%
+	\expandafter\getrealtitle@NOTE\NOTE\@nil
+}
+\def\getrealtitle@NOTE\if=#1=#2\@nil{\ifblank{#1}{}{\ \unskip\textsc{\ #1}.}}
+
+%% fix the error if the optional argument is specified but empty
+\let\thmt@shortoptarg\@empty
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Boxes and theorem/styles %%%
+
+%%% Generic color box
+
+\newmdenv[skipabove=7pt,
+skipbelow=7pt,
+rightline=false,
+leftline=true,
+topline=false,
+bottomline=false,
+backgroundcolor=ColorVariable!10,
+linecolor=ColorVariable,
+innerleftmargin=5pt,
+innerrightmargin=5pt,
+innertopmargin=5pt,
+innerbottommargin=5pt,
+leftmargin=0cm,
+rightmargin=0cm,
+linewidth=2pt]{ColorBox}
+
+%%% Generic color box style for lstlisting
+
+\mdfdefinestyle{ColorBoxStyle}{skipabove=7pt,
+	skipbelow=7pt,
+	rightline=false,
+	leftline=true,
+	topline=false,
+	bottomline=false,
+	backgroundcolor=ColorVariable!10,
+	linecolor=ColorVariable,
+	innerleftmargin=5pt,
+	innerrightmargin=5pt,
+	innertopmargin=5pt,
+	innerbottommargin=5pt,
+	leftmargin=0cm,
+	rightmargin=0cm,
+	linewidth=2pt}
+
+\makeatletter
+\def\@noargument{noargument}
+\newenvironment{ColorBoxAlt}[1][noargument]
+{%\def\@opt@arg{#1}% Caption optional argument
+	\mdframed[style=ColorBoxStyle]}
+{\endmdframed\par\nobreak%
+	%\ifx\@opt@arg\@noargument\else\centering\@opt@arg\par\fi
+}%
+\makeatother
+
+
+%% set up variables for theorem environment.
+\newcommand{\thmacr}{~}
+\newcommand{\thmtoccat}{~}
+\newcommand{\thmpunct}{~}
+\newcommand{\thmante}{}
+
+%% generic theoremstyle
+%  * postheadspace = \newline
+%  * qed = none
+%  * addcontentsline = yes
+%  * font = italics
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont\itshape,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+postheadspace=\newline
+]{genericsty}
+
+%% no newline theoremstyle
+%  * postheadspace = 0.5em
+%  * qed = none
+%  * addcontentsline = yes
+%  * font = italics
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont\itshape,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+postheadspace=0.50em
+]{nonewlinesty}
+
+%% qed theoremstyle
+%  * postheadspace = \newline
+%  * qed = \qedsymbol
+%  * addcontentsline = yes
+%  * font = italics
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont\itshape,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+qed=\qedsymbol,
+postheadspace=\newline
+]{qedsty}
+
+%% qed no newline theoremstyle
+%  * postheadspace = 0.5em
+%  * qed = \qedsymbol
+%  * addcontentsline = yes
+%  * font = italics
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont\itshape,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+qed=\qedsymbol,
+postheadspace=0.50em
+]{nonewlineqedsty}
+
+%%% 
+
+%% generic normal theoremstyle
+%  * postheadspace = \newline
+%  * qed = none
+%  * addcontentsline = yes
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+postheadspace=\newline
+]{genericnormalsty}
+
+%% normal no newline theoremstyle
+%  * postheadspace = 0.5em
+%  * qed = none
+%  * addcontentsline = yes
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+postheadspace=0.50em
+]{normalnonewlinesty}
+
+%% normal qed theoremstyle
+%  * postheadspace = \newline
+%  * qed = \qedsymbol
+%  * addcontentsline = yes
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+qed=\qedsymbol,
+postheadspace=\newline
+]{normalqedsty}
+
+%% normal qed no newline theoremstyle
+%  * postheadspace = 0.5em
+%  * qed = \qedsymbol
+%  * addcontentsline = yes
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\NAME\, \NUMBER.\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}
+	\addcontentsline{\thmtoccat}{section}{\small{\textbf{\thmacr\NUMBER}. \NOTEtitleifnotblank}}},
+qed=\qedsymbol,
+postheadspace=0.50em
+]{normalnonewlineqedsty}
+
+%%%
+
+%% generic normal nonum theoremstyle
+%  * postheadspace = \newline
+%  * qed = none
+%  * addcontentsline = no
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\thmante\NAME\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}},
+postheadspace=\newline
+]{genericnornonumsty}
+
+%% normal nonum no newline theoremstyle
+%  * postheadspace = 0.5em
+%  * qed = none
+%  * addcontentsline = no
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\thmante\NAME\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}},
+postheadspace=0.50em
+]{nornonumnonewlinesty}
+
+%% normal nonum qed theoremstyle
+%  * postheadspace = \newline
+%  * qed = \qedsymbol
+%  * addcontentsline = no
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\thmante\NAME\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}},
+qed=\qedsymbol,
+postheadspace=\newline
+]{nornonumqedsty}
+
+%% normal nonum qed no newline theoremstyle
+%  * postheadspace = 0.5em
+%  * qed = \qedsymbol
+%  * addcontentsline = yes
+%  * font = normal
+
+\declaretheoremstyle[
+spaceabove=0pt,
+spacebelow=0pt,
+bodyfont=\normalfont,
+headindent=0pt,
+headfont=\bfseries\scshape\color{ColorVariable!55!black},
+notebraces={ }{ },
+notefont=\scshape,
+headpunct=\color{ColorVariable!55!black},
+headformat={\thmante\NAME\small\bfseries\scshape\color{ColorVariable!55!black}{\NOTEifnotblank}},
+qed=\qedsymbol,
+postheadspace=0.50em
+]{nornonumnonewlineqedsty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    ENVIRONMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%TODO: check if using two optional command might be better?
+% https://tex.stackexchange.com/questions/188485/in-declaredocumentcommand-signaling-first-optional-argument-is-missing
+
+%%% Theorem %%%
+
+\newcounter{theorem}
+
+\declaretheorem[style=genericsty,numberwithin=section,name=\textsc{Teorema}]{theoremT}
+
+\declaretheorem[style=nonewlinesty,numberlike=theoremT,name=\textsc{Teorema}]{theoremnonewlineT}
+
+\declaretheorem[style=qedsty,numberlike=theoremT,name=\textsc{Teorema}]{theoremqedT}
+
+\declaretheorem[style=nonewlineqedsty,numberlike=theoremT,name=\textsc{Teorema}]{theoremnonewlineqedT}
+
+\NewDocumentEnvironment{theorem}{m}
+{\colorlet{ColorVariable}{redsalsa}%
+\renewcommand{\thmacr}{THM}%
+\renewcommand{\thmtoccat}{theorem}%
+	\IfEqCase{#1}{%
+	{nq}{%
+		\begin{ColorBox}\begin{theoremnonewlineqedT}%
+	}%
+	{q}{
+		\begin{ColorBox}\begin{theoremqedT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{theoremnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{theoremT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{nq}{%
+		\end{theoremnonewlineqedT}\end{ColorBox}%
+	}%
+	{q}{%
+		\end{theoremqedT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{theoremnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{theoremT}\end{ColorBox}%
+	]%
+}%
+
+%%% Proposition %%%
+
+\newcounter{proposition}
+
+\declaretheorem[style=genericsty,numberwithin=section,name=\textsc{Proposizione}]{propositionT}
+
+\declaretheorem[style=nonewlinesty,numberlike=propositionT,name=\textsc{Proposizione}]{propositionnonewlineT}
+
+\declaretheorem[style=qedsty,numberlike=propositionT,name=\textsc{Proposizione}]{propositionqedT}
+
+\declaretheorem[style=nonewlineqedsty,numberlike=propositionT,name=\textsc{Proposizione}]{propositionnonewlineqedT}
+
+\NewDocumentEnvironment{proposition}{m}
+{\colorlet{ColorVariable}{orangered}%
+\renewcommand{\thmacr}{PRP}%
+	\IfEqCase{#1}{%
+	{nq}{%
+		\begin{ColorBox}\begin{propositionnonewlineqedT}%
+	}%
+	{q}{
+		\begin{ColorBox}\begin{propositionqedT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{propositionnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{propositionT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{nq}{%
+		\end{propositionnonewlineqedT}\end{ColorBox}%
+	}%
+	{q}{%
+		\end{propositionqedT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{propositionnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{propositionT}\end{ColorBox}%
+	]%
+}%
+
+%%% Lemma %%%
+
+\newcounter{lemma}
+
+\declaretheorem[style=genericsty,numberwithin=section,name=\textsc{Lemma}]{lemmaT}
+
+\declaretheorem[style=nonewlinesty,numberlike=lemmaT,name=\textsc{Lemma}]{lemmanonewlineT}
+
+\declaretheorem[style=qedsty,numberlike=lemmaT,name=\textsc{Lemma}]{lemmaqedT}
+
+\declaretheorem[style=nonewlineqedsty,numberlike=lemmaT,name=\textsc{Lemma}]{lemmanonewlineqedT}
+
+\NewDocumentEnvironment{lemma}{m}
+{\colorlet{ColorVariable}{yelloworange}%
+\renewcommand{\thmacr}{LEM}%
+\renewcommand{\thmtoccat}{theorem}%
+	\IfEqCase{#1}{%
+	{nq}{%
+		\begin{ColorBox}\begin{lemmanonewlineqedT}%
+	}%
+	{q}{
+		\begin{ColorBox}\begin{lemmaqedT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{lemmanonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{lemmaT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{nq}{%
+		\end{lemmanonewlineqedT}\end{ColorBox}%
+	}%
+	{q}{%
+		\end{lemmaqedT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{lemmanonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{lemmaT}\end{ColorBox}%
+	]%
+}%
+
+%%% Corollary %%%
+
+\newcounter{corollary}
+
+\declaretheorem[style=genericsty,numberwithin=section,name=\textsc{Corollario}]{corollaryT}
+
+\declaretheorem[style=nonewlinesty,numberlike=corollaryT,name=\textsc{Corollario}]{corollarynonewlineT}
+
+\declaretheorem[style=qedsty,numberlike=corollaryT,name=\textsc{Corollario}]{corollaryqedT}
+
+\declaretheorem[style=nonewlineqedsty,numberlike=corollaryT,name=\textsc{Corollario}]{corollarynonewlineqedT}
+
+\NewDocumentEnvironment{corollary}{m}
+{\colorlet{ColorVariable}{byc}%
+\renewcommand{\thmacr}{COR}%
+\renewcommand{\thmtoccat}{theorem}%
+	\IfEqCase{#1}{%
+	{nq}{%
+		\begin{ColorBox}\begin{corollarynonewlineqedT}%
+	}%
+	{q}{
+		\begin{ColorBox}\begin{corollaryqedT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{corollarynonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{corollaryT}%
+	]%
+	}%
+{\IfEqCase{#1}{%
+	{nq}{%
+		\end{corollarynonewlineqedT}\end{ColorBox}%
+	}%
+	{q}{%
+		\end{corollaryqedT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{corollarynonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{corollaryT}\end{ColorBox}%
+	]%
+}%
+
+%%% Property %%%
+
+\newcounter{property}
+
+\declaretheorem[style=genericsty,numberwithin=section,name=\textsc{Proprietà}]{propertyT}
+
+\declaretheorem[style=nonewlinesty,numberlike=propertyT,name=\textsc{Proprietà}]{propertynonewlineT}
+
+\declaretheorem[style=qedsty,numberlike=propertyT,name=\textsc{Proprietà}]{propertyqedT}
+
+\declaretheorem[style=nonewlineqedsty,numberlike=propertyT,name=\textsc{Proprietà}]{propertynonewlineqedT}
+
+\NewDocumentEnvironment{property}{m}
+{\colorlet{ColorVariable}{pistachio}%
+\renewcommand{\thmacr}{PRT}%
+\renewcommand{\thmtoccat}{theorem}%
+	\IfEqCase{#1}{%
+	{nq}{%
+		\begin{ColorBox}\begin{propertynonewlineqedT}%
+	}%
+	{q}{
+		\begin{ColorBox}\begin{propertyqedT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{propertynonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{propertyT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{nq}{%
+		\end{propertynonewlineqedT}\end{ColorBox}%
+	}%
+	{q}{%
+		\end{propertyqedT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{propertynonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{propertyT}\end{ColorBox}%
+	]%
+}%
+
+%%% Proof %%%
+
+\declaretheorem[style=nornonumqedsty,name=\textsc{Dimostrazione}]{proofT}
+
+\declaretheorem[style=nornonumnonewlineqedsty,name=\textsc{Dimostrazione}]{proofnonewlineT}
+
+\declaretheorem[style=nornonumqedsty,name=\textsc{Dimostrazione}]{proofoptionalT}
+
+\declaretheorem[style=nornonumnonewlineqedsty,name=\textsc{Dimostrazione}]{proofnonewlineoptionalT}
+
+\RenewDocumentEnvironment{proof}{m}
+{\colorlet{ColorVariable}{platinum}%
+\renewcommand{\thmpunct}{.}%
+	\IfEqCase{#1}{%
+	{no}{%
+		\renewcommand{\thmante}{\color{ColorVariable!55!black}{⋆}\ }%
+		\begin{ColorBox}\begin{proofnonewlineoptionalT}%
+	}%
+	{o}{
+		\renewcommand{\thmante}{\color{ColorVariable!55!black}{⋆}\ }%		
+		\begin{ColorBox}\begin{proofoptionalT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{proofnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{proofT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{no}{%
+		\end{proofnonewlineoptionalT}\end{ColorBox}%
+		\renewcommand{\thmante}{}%
+	}%
+	{o}{%
+		\end{proofoptionalT}\end{ColorBox}%
+		\renewcommand{\thmante}{}%
+	}%
+	{n}{%
+		\end{proofnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{proofT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Axiom & Principles %%%
+
+\newcounter{axiom}
+
+\newcounter{principle}
+
+\declaretheorem[style=genericnormalsty,numberwithin=section,name=\textsc{Assioma}]{axiomT}
+
+\declaretheorem[style=normalnonewlinesty,numberlike=axiomT,name=\textsc{Assioma}]{axiomnonewlineT}
+
+\declaretheorem[style=genericnormalsty,numberwithin=section,name=\textsc{Principio}]{principleT}
+
+\declaretheorem[style=normalnonewlinesty,numberlike=principleT,name=\textsc{Principio}]{principlenonewlineT}
+
+\NewDocumentEnvironment{axiom}{m}
+{\colorlet{ColorVariable}{CGblue}%
+\renewcommand{\thmacr}{AXI}%
+\renewcommand{\thmtoccat}{definition}%
+	\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{axiomnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{axiomT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{axiomnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{axiomT}\end{ColorBox}%
+	]%
+}%
+
+\NewDocumentEnvironment{principle}{m}
+{\colorlet{ColorVariable}{CGblue}%
+\renewcommand{\thmacr}{PRI}%
+\renewcommand{\thmtoccat}{definition}%
+	\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{principlenonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{principleT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{principlenonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{principleT}\end{ColorBox}%
+	]%
+}%
+
+%%% Definition %%%
+
+\newcounter{definition}
+
+\declaretheorem[style=genericnormalsty,numberwithin=section,name=\textsc{Definizione}]{definitionT}
+
+\declaretheorem[style=normalnonewlinesty,numberlike=definitionT,name=\textsc{Definizione}]{definitionnonewlineT}
+
+\NewDocumentEnvironment{definition}{m}
+{\colorlet{ColorVariable}{ceruleancrayola}%
+\renewcommand{\thmacr}{DEF}%
+\renewcommand{\thmtoccat}{definition}%
+	\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{definitionnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{definitionT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{definitionnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{definitionT}\end{ColorBox}%
+	]%
+}%
+
+%%% Remark %%%
+
+\declaretheorem[style=genericnornonumsty,numberwithin=section,name=\textsc{Osservazione}]{remarkT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=remarkT,name=\textsc{Osservazione}]{remarknonewlineT}
+
+\declaretheorem[style=genericnornonumsty,numberwithin=remarkT,name=\textsc{Osservazioni}]{remarksT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=remarkT,name=\textsc{Osservazioni}]{remarknonewlinesT}
+
+\NewDocumentEnvironment{remark}{m}
+{\colorlet{ColorVariable}{pumpkin}%
+\renewcommand{\thmpunct}{.}%
+	\IfEqCase{#1}{%
+	{pn}{%
+		\begin{ColorBox}\begin{remarknonewlinesT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{remarknonewlineT}%
+	}%
+	{p}{%
+		\begin{ColorBox}\begin{remarksT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{remarkT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{pn}{%
+		\end{remarknonewlinesT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{remarknonewlineT}\end{ColorBox}%
+	}%
+	{p}{%
+		\end{remarksT}\end{ColorBox}%
+	}%
+	}[%
+		\end{remarkT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Warning! %%%
+
+\declaretheorem[style=genericnornonumsty,numberwithin=section,name=\textsc{Attenzione!}]{warningT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberwithin=section,name=\textsc{Attenzione!}]{warningnonewlineT}
+
+\NewDocumentEnvironment{warning}{m}
+{\colorlet{ColorVariable}{darkdarkred}%
+	\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{warningnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{warningT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{warningnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{warningT}\end{ColorBox}%
+	]%
+}%
+
+%%% Example %%%
+
+\declaretheorem[style=genericnornonumsty,numberwithin=section,name=\textsc{Esempio}]{exampleT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=exampleT,name=\textsc{Esempio}]{examplenonewlineT}
+
+\declaretheorem[style=genericnornonumsty,numberwithin=exampleT,name=\textsc{Esempi}]{examplesT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=exampleT,name=\textsc{Esempi}]{examplenonewlinesT}
+
+\NewDocumentEnvironment{example}{m}
+{\colorlet{ColorVariable}{zomp}%
+\renewcommand{\thmpunct}{.}%
+\IfEqCase{#1}{%
+	{pn}{%
+		\begin{ColorBox}\begin{examplenonewlinesT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{examplenonewlineT}%
+	}%
+	{p}{%
+		\begin{ColorBox}\begin{examplesT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{exampleT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{pn}{%
+		\end{examplenonewlinesT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{examplenonewlineT}\end{ColorBox}%
+	}%
+	{p}{%
+		\end{examplesT}\end{ColorBox}%
+	}%
+	}[%
+		\end{exampleT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Digression %%%
+
+\declaretheorem[style=genericnornonumsty,numberwithin=section,name=\textsc{Digressione}]{digressionT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberwithin=section,name=\textsc{Digressione}]{digressionnonewlineT}
+
+\NewDocumentEnvironment{digression}{m}
+{\colorlet{ColorVariable}{yellowcrayola}%
+\renewcommand{\thmpunct}{.}%
+\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{digressionnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{digressionT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{digressionnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{digressionT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Intuitively... %%%
+
+\declaretheorem[style=genericnornonumsty,numberwithin=section,name=\textsc{Intuitivamente...}]{intuitivelyT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=section,name=\textsc{Intuitivamente...}]{intuitivelynonewlineT}
+
+\NewDocumentEnvironment{intuitively}{m}
+{\colorlet{ColorVariable}{sapphireblue}%
+\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{intuitivelynonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{intuitivelyT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{intuitivelynonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{intuitivelyT}\end{ColorBox}%
+	]%
+}%
+
+%%% Exercise %%%
+
+\declaretheorem[style=genericnornonumsty,numberwithin=section,name=\textsc{Esercizio}]{exerciseT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=exerciseT,name=\textsc{Esercizio}]{exercisenonewlineT}
+
+\declaretheorem[style=genericnornonumsty,numberlike=exerciseT,name=\textsc{Esercizi}]{exercisesT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=exerciseT,name=\textsc{Esercizi}]{exercisenonewlinesT}
+
+\NewDocumentEnvironment{exercise}{m}
+{\colorlet{ColorVariable}{forestgreencrayola}%
+\renewcommand{\thmpunct}{.}%
+\IfEqCase{#1}{%
+	{pn}{%
+		\begin{ColorBox}\begin{exercisenonewlinesT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{exercisenonewlineT}%
+	}%
+	{p}{%
+		\begin{ColorBox}\begin{exercisesT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{exerciseT}%
+]%
+}%
+{\IfEqCase{#1}{%
+	{pn}{%
+		\end{exercisenonewlinesT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{exercisenonewlineT}\end{ColorBox}%
+	}%
+	{p}{%
+		\end{exercisesT}\end{ColorBox}%
+	}%
+	}[%
+		\end{exerciseT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Solution %%%
+
+\declaretheorem[style=genericnornonumsty,name=\textsc{Soluzione}]{solutionT}
+
+\declaretheorem[style=nornonumnonewlinesty,name=\textsc{Soluzione}]{solutionnonewlineT}
+
+\NewDocumentEnvironment{solution}{m}
+{\colorlet{ColorVariable}{queenblue}%
+\renewcommand{\thmpunct}{.}%
+\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{solutionnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{solutionT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{solutionnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{solutionT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Notation %%%
+
+\declaretheorem[style=genericnornonumsty,name=\textsc{Notazione}]{notationT}
+
+\declaretheorem[style=nornonumnonewlinesty,name=\textsc{Notazione}]{notationnonewlineT}
+
+\NewDocumentEnvironment{notation}{m}
+{\colorlet{ColorVariable}{charcoal}%
+\renewcommand{\thmpunct}{.}%
+\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{notationnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{notationT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{notationnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{notationT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Tips and Tricks %%%
+
+\declaretheorem[style=genericnornonumsty,name=\textsc{Tips \& Tricks!}]{tipsandtricksT}
+
+\declaretheorem[style=nornonumnonewlinesty,name=\textsc{Tips \& Tricks!}]{tipsandtricksnonewlineT}
+
+\NewDocumentEnvironment{tipsandtricks}{m}
+{\colorlet{ColorVariable}{violetryb}%
+\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{tipsandtricksnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{tipsandtricksT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{tipsandtricksnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{tipsandtricksT}\end{ColorBox}%
+	]%
+}%
+
+%%% Units %%%
+
+\declaretheorem[style=genericnornonumsty,name=\textsc{Unità di misura}]{unitsT}
+
+\declaretheorem[style=nornonumnonewlinesty,name=\textsc{Unità di misura}]{unitsnonewlineT}
+
+\NewDocumentEnvironment{units}{m}
+{\colorlet{ColorVariable}{violetryb}% %TODO: changecolor
+\renewcommand{\thmpunct}{.}%
+\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{unitsnonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{unitsT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{tipsandtricksnonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{tipsandtricksT}\end{ColorBox}%
+	]%
+\renewcommand{\thmpunct}{~}%
+}%
+
+%%% Remember... %%%
+
+\declaretheorem[style=genericnornonumsty,numberwithin=section,name=\textsc{Ricordiamo...}]{rememberT}
+
+\declaretheorem[style=nornonumnonewlinesty,numberlike=section,name=\textsc{Ricordiamo...}]{remembernonewlineT}
+
+\NewDocumentEnvironment{remember}{m}
+{\colorlet{ColorVariable}{cadetblue}%
+\IfEqCase{#1}{%
+	{n}{%
+		\begin{ColorBox}\begin{remembernonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{rememberT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{n}{%
+		\end{remembernonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{rememberT}\end{ColorBox}%
+	]%
+}%
+	
+%%% Conjecture %%%
+
+\newcounter{conjecture}
+
+\declaretheorem[style=genericsty,numberwithin=section,name=\textsc{Teorema}]{conjectureT}
+
+\declaretheorem[style=nonewlinesty,numberlike=conjectureT,name=\textsc{Teorema}]{conjecturenonewlineT}
+
+\declaretheorem[style=qedsty,numberlike=conjectureT,name=\textsc{Teorema}]{conjectureqedT}
+
+\declaretheorem[style=nonewlineqedsty,numberlike=conjectureT,name=\textsc{Teorema}]{conjecturenonewlineqedT}
+
+\NewDocumentEnvironment{conjecture}{m}
+{\colorlet{ColorVariable}{redsalsa}% %TODO: change color
+\renewcommand{\thmacr}{CON}%
+\renewcommand{\thmtoccat}{theorem}%
+\IfEqCase{#1}{%
+	{nq}{%
+		\begin{ColorBox}\begin{conjecturenonewlineqedT}%
+	}%
+	{q}{
+		\begin{ColorBox}\begin{conjectureqedT}%
+	}%
+	{n}{%
+		\begin{ColorBox}\begin{conjecturenonewlineT}%
+	}%
+	}[%
+		\begin{ColorBox}\begin{conjectureT}%
+	]%
+}%
+{\IfEqCase{#1}{%
+	{nq}{%
+		\end{conjecturenonewlineqedT}\end{ColorBox}%
+	}%
+	{q}{%
+		\end{conjectureqedT}\end{ColorBox}%
+	}%
+	{n}{%
+		\end{conjecturenonewlineT}\end{ColorBox}%
+	}%
+	}[%
+		\end{conjectureT}\end{ColorBox}%
+	]%
+}
+
+%%% Code Environment %%%
+
+\lstnewenvironment{codelatex}[1][]
+{%
+	\lstset{
+		language=Tex,
+		basicstyle=\ttfamily,
+		keywordstyle=\bfseries\color{blue},
+		stringstyle=\bfseries\itshape\color{green!40!black},
+		commentstyle=\bfseries\itshape\color{green!40!black},
+		showspaces=false,
+		showtabs=false,
+		breaklines=true,
+		showstringspaces=false,
+		tabsize=1,
+		emph={
+			begin,end,chapter,section,},
+		emphstyle=\bfseries\color{blue}
+	}%
+	\colorlet{ColorVariable}{codegray}%
+	\ColorBoxAlt
+	{\bfseries\scshape\color{ColorVariable!55!black}{Codice}\IfNoValueTF{#1}{}{\ifblank{#1}{}{\ \ (#1)}}.%
+	}\normalfont\small
+}{%
+	\endColorBoxAlt
+}
+
+\lstnewenvironment{codematlab}[1][]
+{%
+	\lstset{
+		language=Matlab,
+		basicstyle=\ttfamily,
+		keywordstyle=\bfseries\color{blue},
+		stringstyle=\bfseries\itshape\color{green!40!black},
+		commentstyle=\bfseries\itshape\color{green!40!black},
+		showspaces=false,
+		showtabs=false,
+		breaklines=true,
+		showstringspaces=false,
+		tabsize=1,
+		emphstyle=\bfseries\color{blue}
+	}%
+	\colorlet{ColorVariable}{codegray}%
+	\ColorBoxAlt
+	{\bfseries\scshape\color{ColorVariable!55!black}{Codice}\IfNoValueTF{#1}{}{\ifblank{#1}{}{\ \ (#1)}}.%
+	}\normalfont\small
+}{%
+	\endColorBoxAlt
+}
+
+%%% Code Environment (inline) %%%
+
+\newcommand\mystrut{\rule[-2pt]{0pt}{.8em}}
+
+\newtcbox{\inlinecodeT}{on line, boxrule=0pt, boxsep=0pt, top=2pt,
+	left=2pt, bottom=2pt, right=2pt, colback=ColorVariable!10,
+	fontupper={\ttfamily\mystrut}}
+
+\NewDocumentCommand{\inlinecode}{m}{\colorlet{ColorVariable}{codegray}\inlinecodeT{#1}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Colorboxes around text %%%
+
+\newtcbox{\ColorBoxMath}[1][]{colback=yellowpastellow!30!white,colframe=ColorVariable!85!black,drop fuzzy shadow, nobeforeafter, math upper, tcbox raise base, enhanced}
+%\newtcbox{\tcmathboxdefine}[1][]{colback=yellowpastellow!30!white,colframe=ceruleancrayola!85!black,drop fuzzy shadow, nobeforeafter, math upper, tcbox raise base, enhanced}
+%\newtcbox{\tcmathboxthm}[1][]{colback=yellowpastellow!30!white,colframe=redsalsa!85!black,drop fuzzy shadow, nobeforeafter, math upper, tcbox raise base, enhanced}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Table of theorems and table of definitions %%%
+
+\makeatletter
+% Table of definitions
+\newcommand\listdefinename{Elenco delle definizioni, degli assiomi e dei principi}
+\newcommand\listofdefinitions{
+	\section*{\listdefinename}
+	\begin{multicols}{2}
+		\@starttoc{definition}
+	\end{multicols}}
+
+% Table of theorems
+\newcommand\listtheoremaname{Elenco dei teoremi}
+\newcommand\listoftheoremas{
+	\section*{\listtheoremaname}\begin{multicols}{2}
+		\@starttoc{theorem}
+	\end{multicols}}
+
+% gets chapter number
+\newcommand\getcurrentref[1]{%
+	\ifnumequal{\value{#1}}{0}
+	{??}
+	{\the\value{#1}}%
+}
+
+% gets chapter title
+\newcommand*\nowtitle{}
+
+\let\oldchaptermark=\chaptermark
+\renewcommand*\chaptermark[1]{%
+	\renewcommand*\nowtitle{#1}%
+	\oldchaptermark{#1}}
+
+% add chapter number and title to toc of definition
+\AtBeginEnvironment{definition}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noDefinition}{
+		\addtocontents{definition}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noDefinition}
+	}{}
+}%
+
+\AtBeginEnvironment{axiom}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noDefinition}{
+		\addtocontents{definition}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noDefinition}
+	}{}
+}%
+
+\AtBeginEnvironment{principle}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noDefinition}{
+		\addtocontents{definition}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noDefinition}
+	}{}
+}%
+
+% add chapter number and title to toc of theorems
+\AtBeginEnvironment{theorem}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noTheorem}{
+		\addtocontents{theorem}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noTheorem}
+	}{}
+}%
+
+\AtBeginEnvironment{lemma}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noTheorem}{
+		\addtocontents{theorem}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noTheorem}
+	}{}
+}%
+
+\AtBeginEnvironment{corollary}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noTheorem}{
+		\addtocontents{theorem}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noTheorem}
+	}{}
+}%
+
+\AtBeginEnvironment{proposition}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noTheorem}{
+		\addtocontents{theorem}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noTheorem}
+	}{}
+}%
+
+\AtBeginEnvironment{property}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noTheorem}{
+		\addtocontents{theorem}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noTheorem}
+	}{}
+}%
+
+\AtBeginEnvironment{conjecture}{%
+	\iftoggle{AppendixChapters}{
+		\global\togglefalse{noDefinition}
+		\global\togglefalse{AppendixChapters}
+	}{}
+	\iftoggle{noTheorem}{
+		\addtocontents{theorem}{\noindent\textls{\textsc{\textcolor{reddo}{Capitolo \getcurrentref{chapter}:}
+					\nowtitle}}
+		}{}
+		\global\togglefalse{noTheorem}
+	}{}
+}%
+
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

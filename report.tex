@@ -1,0 +1,42 @@
+\documentclass[a4paper, 11pt, twoside, openright, italian]{memoir}
+
+\usepackage{preamble/mypreamble}
+
+% SVN info for this file
+\svnidlong
+{$HeadURL$}
+{$LastChangedDate$}
+{$LastChangedRevision$}
+{$LastChangedBy$}
+
+\includeonly{%
+  introduction/titlepage,
+  introduction/introduction,
+  introduction/toc,
+  chapters/chap1,
+  chapters/chap2,
+  appendix/list,  
+  appendix/bibliography
+}
+
+\makeindex
+\begin{document}
+
+\frontmatter
+%\include{introduction/titlepage}
+\include{introduction/introduction}
+\include{introduction/toc}
+
+\mainmatter
+\part{Parte prima}
+\labelPart{first}
+\include{chapters/chap1}
+\include{chapters/chap2}
+\appendix
+\part{Appendici}
+\labelPart{appendix}
+\include{appendix/list}
+\backmatter
+\include{appendix/bibliography}
+
+\end{document}

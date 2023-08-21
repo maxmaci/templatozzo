@@ -1,0 +1,411 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{commandozzo}[2022/11/17 version 1.0]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    INTERNAL COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ExplSyntaxOn
+\DeclareExpandableDocumentCommand{\IfBlankTF}{mmm}
+{
+	\tl_if_blank:nTF { #1 } { #2 } { #3 }
+}
+\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    LATEX TEXT COMMAND
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Underlined, bold, sans serif
+\newcommand{\underbfsf}[1]{%
+\textbf{\textsf{\underline{#1}}}%
+}
+
+% Forced displaystyle in frac
+\newcommand{\Dfrac}[2]{%
+	\dfrac{\displaystyle #1}{\displaystyle #2}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    PROOF UTILITIES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% Proof utilities %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Direct or right implication (with round bracket and spacing)
+\newcommand{\rightimplies}{%
+	\ensuremath{\implies)\quad}%
+}
+% Inverse or left implication (with round bracket and spacing)
+\newcommand{\leftimplies}{%
+	\ensuremath{\impliedby)\quad}%
+}
+
+% Direct or right inclusion (with round bracket and spacing)
+\newcommand{\rightinclude}{%
+	\ensuremath{\subseteq)\quad}%
+}
+% Inverse or left inclusion (with round bracket and spacing)
+\newcommand{\leftinclude}{%
+	\ensuremath{\supseteq)\quad}%
+}
+
+% Vertical iff
+\newcommand{\viff}{\Big\Updownarrow}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    NUMBERS & LETTERS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% Number sets %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Natural set
+\newcommand{\N}{\mathbb{N}}
+% Integer set
+\newcommand{\Z}{\mathbb{Z}}
+% Rational set
+\newcommand{\Q}{\mathbb{Q}}
+% Real field
+\newcommand{\R}{\mathbb{R}}
+% Irrational set 
+\newcommand{\Irr}{\R\setminus\Q}
+% Complex field
+\newcommand{\C}{\mathbb{C}}
+% Quaternions
+\newcommand{\Hb}{\mathbb{H}}
+% Octonions
+\newcommand{\Ob}{\mathbb{O}}
+% Sedenion
+\newcommand{\Sb}{\mathbb{S}}
+% Generic field
+\newcommand{\K}{\mathbb{K}}
+% Generic finite field
+\newcommand{\F}{\mathbb{F}}
+% Generic algebraic closed field
+\newcommand{\kac}{\mathcal{k}}
+% Algebraic numbers set
+\newcommand{\A}{\mathbb{A}}
+
+% Good-looking epsilon
+\AtBeginDocument{
+	\let\oldepsilon\epsilon
+	\let\epsilon\varepsilon
+	\let\varepsilon\oldepsilon
+}
+
+% Good-looking phi
+\AtBeginDocument{
+	\let\oldphi\phi
+	\let\phi\varphi
+	\let\varphi\oldphi
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    LOGIC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% Set theory %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Set
+\NewDocumentCommand{\Set}{ >{\SplitArgument{1}{|}}m }{\SetAux#1}
+\NewDocumentCommand{\SetAux}{mm}{%
+	\left\{\,%
+	#1%
+	\IfValueT{#2}{\,\middle|\,#2}%
+	\,\right\}%
+}
+% Power set
+\newcommand{\powerset}[1]{%
+	\ensuremath{\mathcal{P}\left(#1\right)}%
+}
+% Round empty set
+\let\varemptyset\emptyset
+\let\emptyset\varnothing
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    ALGEBRA
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% Category theory %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Category
+\newcommand{\cat}{\mathcal{C}}
+
+% Objects
+\DeclareMathOperator{\ob}{Ob}
+
+\DeclareDocumentCommand{\obj}{m}%
+{%
+\ensuremath{\ob\left(#1\right)}
+}%
+
+% Morphisms
+\DeclareDocumentCommand{\homo}{o m}%
+{%
+	\IfNoValueTF{#1}%
+	{\ensuremath{\hom\left(#2\right)}}%
+	{\IfBlankTF{#1}%
+		{\ensuremath{\hom\left(#2\right)}}
+		{\ensuremath{\hom_{#1}\!\left(#2\right)}}%
+	}
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%% Functions %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Choose arrow for functions
+\newcommand{\arrowfunct}{\arrow[r]}
+
+\newsavebox{\functinaboxA}
+\newsavebox{\functinaboxB}
+
+\DeclareDocumentCommand{\innerfunct}{m m o o}%
+{
+\IfNoValueTF{#3}%
+	{\IfNoValueTF{#4}%
+			{\hspace{-0.5em}\begin{tikzcd}[ampersand replacement=\&]
+				#1 \arrowfunct \& #2
+			\end{tikzcd}\hspace{-0.5em}
+		}%
+		{\PackageError{commandozzo}{Empty and/or missing output argument of funct, but input argument of funct is missing too. This shouldn't happen.}{extra help}}%
+	}%
+	{\IfBlankTF{#3}%
+		{\PackageError{commandozzo}{Empty input argument of funct}{extra help}}
+		{\IfNoValueTF{#4}
+			{\PackageError{commandozzo}{Missing output argument of funct}{extra help}}
+			{\IfBlankTF{#4}%
+				{\PackageError{commandozzo}{Empty output argument of funct}{extra help}}	
+				{
+				\sbox{\functinaboxA}{$#3$}%
+				\sbox{\functinaboxB}{$#4$}%
+					\hspace{-0.5em}\begin{tikzcd}[ampersand replacement=\&]
+						#1 \arrowfunct \& #2 \\[-23.5pt]
+						\usebox{\functinaboxA} \arrow[r, maps to] \& \usebox{\functinaboxB}
+					\end{tikzcd}\hspace{-0.5em}
+				}
+			}
+		}			
+	}
+}
+
+\DeclareDocumentCommand{\innerfunctnamed}{m m m o o}%
+{
+	\IfNoValueTF{#4}%
+	{\IfNoValueTF{#5}%
+		{\hspace{-0.5em}\begin{tikzcd}[ampersand replacement=\&]
+				#1\ \colon \&[-36.21pt] #2 \arrowfunct \& #3
+			\end{tikzcd}\hspace{-0.5em}
+		}%
+		{\PackageError{commandozzo}{Empty and/or missing output argument of funct, but input argument of funct is missing too. This shouldn't happen.}{extra help}}%
+	}%
+	{\IfBlankTF{#4}%
+		{\PackageError{commandozzo}{Empty input argument of funct}{extra help}}
+		{\IfNoValueTF{#5}
+			{\PackageError{commandozzo}{Missing output argument of funct}{extra help}}
+			{\IfBlankTF{#5}%
+				{\PackageError{commandozzo}{Empty output argument of funct}{extra help}}	
+				{
+				\sbox{\functinaboxA}{$#4$}%
+				\sbox{\functinaboxB}{$#5$}%
+					\hspace{-0.5em}\begin{tikzcd}[ampersand replacement=\&]
+						#1\ \colon \&[-36.21pt] #2 \arrowfunct \& #3 \\[-23pt]
+						\& \usebox{\functinaboxA} \arrow[r, maps to] \& \usebox{\functinaboxB}
+					\end{tikzcd}\hspace{-0.5em}
+				}
+			}
+		}			
+	}
+}
+
+\DeclareDocumentCommand{\funct}{m o m m o o}%
+{
+\IfEqCase{#1}{%
+	{i}{%
+		\renewcommand{\arrowfunct}{\arrow[r, hook]}%
+		\IfNoValueTF{#2}%
+		{\innerfunct{#3}{#4}[#5][#6]}
+		{\IfBlankTF{#2}
+			{\innerfunct{#3}{#4}[#5][#6]}
+			{\innerfunctnamed{#2}{#3}{#4}[#5][#6]}
+		}
+	}%
+	{s}{
+		\renewcommand{\arrowfunct}{\arrow[r, two heads]}%
+		\IfNoValueTF{#2}%
+		{\innerfunct{#3}{#4}[#5][#6]}
+		{\IfBlankTF{#2}
+			{\innerfunct{#3}{#4}[#5][#6]}
+			{\innerfunctnamed{#2}{#3}{#4}[#5][#6]}
+		}
+	}%
+	}[%
+		\renewcommand{\arrowfunct}{\arrow[r]}
+		\IfNoValueTF{#2}%
+		{\innerfunct{#3}{#4}[#5][#6]}
+		{\IfBlankTF{#2}
+			{\innerfunct{#3}{#4}[#5][#6]}
+			{\innerfunctnamed{#2}{#3}{#4}[#5][#6]}
+		}
+	]
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Classical groups %%%%%%%%%%%%%%%%%%%%%%%%%
+%TODO: sotto linear algebra come categoria a parte?
+
+% General linear group
+\DeclareMathOperator{\GL}{GL}
+% Special linear group
+\DeclareMathOperator{\SL}{SL}
+% Orthogonal group
+\DeclareMathOperator{\Or}{O}
+% Special orthogonal group
+\DeclareMathOperator{\SO}{SO}
+% Euclidean group
+\DeclareMathOperator{\E}{E}
+% Special Euclidean group
+\DeclareMathOperator{\SE}{SE}
+% Unitary group
+\DeclareMathOperator{\U}{U}
+% Special unitary group
+\DeclareMathOperator{\SU}{SU}
+% Symplectic group
+\DeclareMathOperator{\Sp}{Sp}
+% Compact symplectic group
+\DeclareMathOperator{\US}{USp}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    GEOMETRY
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% Linear algebra %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Rank
+\DeclareMathOperator{\rk}{rk}
+% Codimension
+\DeclareMathOperator{\codim}{codim}
+% Image
+\DeclareMathOperator{\img}{Im}
+% Trace
+\DeclareMathOperator{\trc}{tr}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Euclidean geometry %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Slanted parallel symbol
+\newcommand{\slantparallel}{\mathbin{\!{/}\mkern-1.5mu{/}\!}}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Topology %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Topology
+\DeclareMathSymbol{\topo}{\mathord}{topology}{`T}
+% Euclidean Topology
+\newcommand{\eucl}{\mathcal{E\! u\! c\! l}}
+
+% Basis
+\newcommand{\basis}{\mathcal{B}}
+
+% Interior
+\newcommand{\interior}[1]{%
+	{\kern0pt#1}^{\mathrm{o}}%
+}
+
+% Unitary interval
+\newcommand{\unint}{\ensuremath{\left[0, 1\right]}}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Algebraic Topology %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Homotopy groups
+\DeclareDocumentCommand{\homotopy}{o m}%
+{%
+	\IfNoValueTF{#1}%
+	{\ensuremath{\pi\left(#2\right)}}%
+	{\IfBlankTF{#1}%
+		{\ensuremath{\pi\left(#2\right)}}
+		{\ensuremath{\pi_{#1}\!\left(#2\right)}}%
+	}
+}%
+
+% Homotopy groups
+\DeclareDocumentCommand{\homology}{o m}%
+{%
+	\IfNoValueTF{#1}%
+	{\ensuremath{H\left(#2\right)}}%
+	{\IfBlankTF{#1}%
+		{\ensuremath{H\left(#2\right)}}
+		{\ensuremath{H_{#1}\!\left(#2\right)}}%
+	}
+}%
+
+% de Rham groups
+\DeclareDocumentCommand{\deRham}{o m}%
+{%
+	\IfNoValueTF{#1}%
+	{\ensuremath{H_{\mathrm{dR}}\left(#2\right)}}%
+	{\IfBlankTF{#1}%
+		{\ensuremath{H_{\mathrm{dR}}\left(#2\right)}}%
+		{\ensuremath{H_{\mathrm{dR}}^{#1}\!\left(#2\right)}}%
+	}
+}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    HISTORY OF MATHEMATICS, MATHEMATICAL TEACHING & FOUNDATIONS OF MATHEMATICS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    MATHEMATICAL ANALYSIS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%% Delimiters %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Absolute value and norm delimiters
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+% Ceiling and floor function
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+% Swap the definition of \ceil* and \floor*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldceil\ceil
+\def\ceil{\@ifstar{\oldceil}{\oldceil*}}
+%
+\let\oldfloor\floor
+\def\floor{\@ifstar{\oldfloor}{\oldfloor*}}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    PROBABILITY AND MATHEMATICAL STATISTICS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    PHYSICS AND MATHEMATICAL PHYSICS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Bold vector
+\newcommand\bv[1]{\vec{\symbf{#1}}}
+
+% Bold versor
+\newcommand\bh[1]{\hat{\symbf{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% f.e.m. and d.d.p
+\newcommand\fem{\ensuremath{\mathrm{f.e.m.}\ }}
+\newcommand\ddp{\ensuremath{\mathrm{d.d.p.}\ }}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    NUMERICAL ANALYSIS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

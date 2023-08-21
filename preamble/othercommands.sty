@@ -1,0 +1,246 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    OTHER COMMANDS PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% spectrum
+
+\DeclareMathOperator{\Spec}{Spec}
+
+\DeclareMathOperator{\diver}{div}
+
+\DeclareMathOperator{\spn}{span}
+
+%%%%%%%%%%%%%%%%%%%%%%%% definizioni omotopia %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% insieme dei cammini
+
+%\newcommand{\inscam}[3]{%
+%	\ensuremath{\Omega\left(#1;\ #2,\ #3\right)}%
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%% definizioni varietà %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% caratteristica di Eulero
+
+\newcommand{\euler}[2]{%
+	\IfEq{#2}{\ }{\ensuremath{\chi\left(#1\right)}}
+	{\ensuremath{\chi\left(#1,\ #2\right)}}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%% definizioni proiettiva  %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% combinazione lineare di v
+
+\newcommand{\lin}[1]{\ensuremath{\mathcal{L}\left(#1\right)}}
+
+% spazio affine di V
+
+\newcommand{\aff}[1]{
+	{\ensuremath{\mathcal{A}\left(#1\right)}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%% altre definizioni  %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% parentesi attorno ad elementi di itemize: indicare la riga in fondo con \tikzmark{...} e poi infine, dopo \endd{itemize}, usare \brackitem
+
+\newcommand{\tikzmark}[1]{\tikz[baseline={(#1.base)},overlay,remember picture] \node[outer sep=0pt, inner sep=0pt] (#1) {\phantom{A}};}
+
+\NewDocumentCommand\brackitem{mmo}{%
+	\IfValueTF {#3}{%
+		\begin{tikzpicture}[overlay, remember picture,decoration={brace,amplitude=1ex}]
+			\draw[decorate,thick] (#1.north east) -- (#2.south east) node[midway, right=0.5cm,text=black,text width = 2in,] {{#3}};
+		\end{tikzpicture}%
+	}%
+	{%
+		\begin{tikzpicture}[overlay, remember picture,decoration={brace,amplitude=1ex}]
+			\draw[decorate,thick] (#1.north east) -- (#2.south east);
+		\end{tikzpicture}%
+	}%
+}%
+
+% testo cerchiato
+
+\newcommand{\circled}[2][black]{%
+	\textcolor{#1}{\begin{tikzpicture}[baseline={(char.base)}]
+			\node (char) {\ensuremath{#2}};
+			\node[draw,circle,minimum size=16pt,inner sep=0pt,overlay] (char.center){};
+	\end{tikzpicture}}
+}
+
+%\newcommand{\circled}[1]{\tikz[baseline=(char.base)]{
+		%		\node[shape=circle,draw,inner sep=2pt] (char) {\ensuremath{#1}};}}
+
+
+% testo in un riquadro ad angoli smussati
+
+\newcommand{\ovaled}[1]{%
+	\tikz[baseline=(char.base)]\node[anchor=south west, draw,rectangle, rounded corners, inner sep=2pt, minimum size=7mm,
+	text height=2mm](char){\ensuremath{#1}} ;}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% index commands %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\gobbleone[1]{}
+\newcommand{\seeonly}[2]{\ (\emph{\seename} #1)}
+\newcommand{\also}[2]{\unskip(\emph{\alsoname} #1)}
+\newcommand{\Also}[2]{\unskip\emph{Si veda anche} #1}
+\let\oldindex\index
+\renewcommand{\index}[1]{\def\exptoindex{#1}\expandafter\oldindex\expandafter{\exptoindex}}
+
+\newcommand{\seeonlyindex}[2]{\index{#1@#1\protect\gobbleone|seeonly{#2}}}
+\newcommand{\alsoindex}[2]{\index{#1!zzzz@\protect\gobbleone|also{#2}}}
+\newcommand{\Alsoindex}[2]{\index{#1!zzzz@\protect\gobbleone|Also{#2}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{scalerel,stackengine}
+\stackMath
+\newcommand\what[1]{%
+	\savestack{\tmpbox}{\stretchto{%
+			\scaleto{%
+				\scalerel*[\widthof{\ensuremath{#1}}]{\kern.1pt\mathchar"0362\kern.1pt}%
+				{\rule{0ex}{\textheight}}%WIDTH-LIMITED CIRCUMFLEX
+			}{\textheight}% 
+		}{2.0ex}}%
+	\stackon[-6.9pt]{#1}{\tmpbox}%
+}
+
+%\newcommand*{\vv}[1]{\vec{\mkern0mu#1}}
+
+\makeatletter
+\newcommand{\vect}[1]{%
+	\vbox{\m@th \ialign {##\crcr
+			\vectfill\crcr\noalign{\kern-\p@ \nointerlineskip}
+			$\hfil\displaystyle{#1}\hfil$\crcr}}}
+\def\vectfill{%
+	$\m@th\smash-\mkern-7mu%
+	\cleaders\hbox{$\mkern-1.8mu\smash-\mkern-2mu$}\hfill
+	\mkern-7mu\raisebox{-3.81pt}[\p@][\p@]{$\mathord\mathchar"017E$}$}
+
+\newcommand{\amsvect}{%
+	\mathpalette {\overarrow@\vectfill@}}
+\def\vectfill@{\arrowfill@\relbar\relbar{\raisebox{-3.81pt}[\p@][\p@]{\scalebox{0.99}{$\mathord\mathchar"017E$}}}}
+
+\newcommand{\amsvectb}{%
+	\mathpalette {\overarrow@\vectfillb@}}
+\newcommand{\vecbar}{%
+	\scalebox{0.8}{$\relbar$}}
+\def\vectfillb@{\arrowfill@\vecbar\vecbar{\raisebox{-4.564pt}[\p@][\p@]{\scalebox{0.95}{$\mathord\mathchar"017E$}}}}
+\makeatother
+
+
+\newcommand{\bvo}[1]{\overrightarrow{\bm{#1}}}
+\newcommand{\vers}[1]{\what{\mathbf{#1}}}
+%\newcommand{\bv}[1]{\amsvectb{\bm{\mathrm{#1}}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\Ccancel[2][black]{\renewcommand\CancelColor{\color{#1}}\cancel{#2}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\makeatletter
+\def\smallunderbrace#1{\mathop{\vtop{\m@th\ialign{##\crcr
+				$\hfil\displaystyle{#1}\hfil$\crcr
+				\noalign{\kern3\p@\nointerlineskip}%
+				\tiny\upbracefill\crcr\noalign{\kern3\p@}}}}\limits}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
+%\pgfplotsset{compat=1.16}
+
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+
+%%%%%%%%%%%%%%%%%%%%%%%% stili tikzcd %%%%%%%%%%%%%%%%%%%%%%%%%
+
+% stile inclinato di 60
+\tikzcdset{%arrow style=tikz, diagrams={>={Stealth[round,length=4pt,width=4.95pt,inset=2.75pt]}},
+	six/.style={anchor=south, rotate=23, inner sep=.5mm, yshift=1mm},
+	nine/.style={anchor=south, rotate=90, inner sep=.5mm, yshift=-6.5mm},
+	sixslant1/.style={anchor=south, rotate=17, inner sep=.5mm, yshift=-4mm},
+	sixslant2/.style={anchor=south, rotate=17, inner sep=.5mm, yshift=1mm}		
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%% altri colori %%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand\blankpage{%
+	\null
+	\thispagestyle{empty}%
+	\addtocounter{page}{-1}%
+	\newpage}
+
+%%%
+%\newcommand{\squarequal}{\ensuremath{\ \framebox[\widthof{.=}]{\rule{0pt}{0.5em}=}\ }}
+\newcommand{\squarequal}{\text{\fboxsep=.3em\fbox{$\displaystyle=$}}}
+
+\newcommand\underrel[3][]{\mathrel{\mathop{#3}\limits_{%
+			\ifx c#1\relax\mathclap{#2}\else#2\fi}}}
+
+%%%
+
+% new font for diamond and heart
+
+\DeclareSymbolFont{extraup}{U}{zavm}{m}{n}
+\DeclareMathSymbol{\varheart}{\mathalpha}{extraup}{86}
+\DeclareMathSymbol{\vardiamond}{\mathalpha}{extraup}{87}
+
+\allowdisplaybreaks
+
+%%%%%
+
+\newcommand\blankpagers{%
+	\null
+	\thispagestyle{empty}%
+	\addtocounter{page}{-1}%
+	\newpage}
+
+% bold vector with arrow
+\newcommand\vbd[1]{\dot{\vec{\mathbf{#1}}}}
+
+\newcommand\vba[1]{\vec{\symbf{#1}}}
+
+\newcommand\vbh[1]{\hat{\symbf{#1}}}
+
+\newcommand\fb[1]{\vb*{\underline{#1}}}
+
+
+\setlength{\fboxsep}{0pt}
+\setlength{\fboxrule}{.1pt}
+
+\makeatletter
+\newcommand{\textscsl}[1]{%
+\tikz[baseline=(N.base)]%
+% The transform says:
+% x' = 1x + 0.22y + 0pt
+% y' = 0x + 1y    + 0pt
+% This gives a slant - adjust the value for each font!
+\pgfsys@transformcm{1}{0}{0.22}{1}{0pt}{0pt}%
+\node[inner sep=0pt] (N) {\textsc{#1}};%
+}
+\makeatother
+
+\newenvironment{dedication}
+{\clearpage           % we want a new page
+\thispagestyle{empty}% no header and footer
+\vspace*{\stretch{1}}% some space at the top 
+\itshape             % the text is in italics
+\raggedleft          % flush to the right margin
+}
+{\par % end the paragraph
+\vspace{\stretch{3}} % space at bottom is three times that at the top
+}
+
+%%%%
+
+%TODO: put elsewhere
+%% raises asterisks in lstlisting
+\makeatletter
+\lst@CCPutMacro
+\lst@ProcessOther {"2A}{%
+	\lst@ttfamily 
+	{\raisebox{2pt}{*}}% used with ttfamily
+	{\raisebox{2pt}{*}}% used with other fonts
+}
+\@empty\z@\@empty
+\makeatother  

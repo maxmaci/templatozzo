@@ -1,0 +1,452 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This package takes care of setting up the preamble for the entire
+% document.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{preamble/mypreamble}
+
+% NOTE: the document needs to be compiled with LuaLaTeX, which is more often than not a better alternative than pdfLaTeX.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    PACKAGES TO LOAD
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Geometry %%%
+
+% Provides an easy and flexible user interface to customize page layout, implementing auto-centering and auto-balancing mechanisms so that the users have only to give the least description for the page layout
+\RequirePackage[margin=3cm]{geometry}
+%\usepackage{layout}
+
+\newcommand\hmmax{0}
+\newcommand\bmmax{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Language & Bibliography %%%
+
+% Manages culturally-determined typographical (and other) rules for a wide range of languages.
+\RequirePackage[italian]{babel}
+
+% Provides a complete reimplementation of the bibliographic facilities provided by LaTeX.
+\RequirePackage[backend=biber,
+sorting=ynt,
+citestyle=apa,
+style=alphabetic]{biblatex} %, backend=bibtex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% American Mathematical Society packages %%%
+
+% Provides a slew of new math-display environment, e.g. multiline equations, aligned equations and non-numbered equation of packages.
+\RequirePackage{amsmath}
+% Provides a slew of new useful symbols for math and non-math uses.
+\RequirePackage{amssymb}
+% Provides a better version of \newtheorem for creating theorem-like environments.
+\RequirePackage{amsthm}
+%provides a series of packages designed to enhance the appearance of documents containing a lot of mathematics. 
+\RequirePackage{mathtools}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Fonts %%%
+
+% Provides an automatic and unified interface to feature-rich AAT and OpenType fonts
+\usepackage{fontspec}
+	% A fontspec option. It *might* be need for speeding up font search memory and loading for fontspec. To be removed in a future version of this Templetozzo:tm:
+%\ExplSyntaxOn
+%\cs_set:Nn \__fontspec_load_external_fontoptions:Nn
+%{}
+%\ExplSyntaxOff
+
+\setmainfont[Path = preamble/fonts/,
+	Extension = .ttf,
+	UprightFont = *-Regular,
+	BoldFont = *-Bold,
+	ItalicFont = *-Italic,
+	BoldItalicFont = *-BoldItalic,
+	RawFeature=+liga
+]{Vollkorn}
+\setmonofont[Path = preamble/fonts/,
+	Extension = .ttf,
+	UprightFont = *-Regular,
+	BoldFont = *-Bold,
+	ItalicFont = *-Italic,
+	BoldItalicFont = *-BoldItalic,
+	Scale=MatchLowercase
+]{AnonymousPro}
+
+\usepackage{unicode-math}
+\setmathfont{Asana Math}
+\mathitalicsmode=1
+ 
+%\everydisplay{\Umathoperatorsize\displaystyle=5ex}
+\setmathfont[range={it/{Latin,num}, bbit/{Latin,num}}]{Libertinus Math} 
+\setmathfont{TeX Gyre Schola Math}[range={up/{latin,Latin,num}, bfup/{latin,Latin,num}, bb}] %, it/{latin,Latin,num} 
+\setmathfont[range={\mathit/greek, \cap},Scale=MatchLowercase]{XITS Math}
+\setmathfont{TeX Gyre Pagella Math}[range=\int]
+
+\usepackage{lualatex-math}
+
+\newfontfamily{\texgyreschola}{TeX Gyre Schola}
+\newfontfamily{\AnonymousPro}{AnonymousPro}
+\DeclareTextFontCommand{\texgyrescholafont}{\texgyreschola}
+\DeclareTextFontCommand{\AnonymousProfont}{\AnonymousPro}
+\DeclareTextFontCommand{\texttt}{\AnonymousPro}
+\renewcommand*{\ttfamily}{\AnonymousPro}
+
+% solves a manualozzo breaking bug related to this following bit. I don't know *why* it solves it, but all it matters that it does.
+\RequirePackage{zref}
+\zref@require@unique
+
+%\makeatletter
+\DeclareFontEncoding{LS1}{}{}
+\DeclareFontSubstitution{LS1}{stix}{m}{n}
+\DeclareMathAlphabet{\mathcal}{LS1}{stixscr}{m}{n}
+\DeclareSymbolFont{topology}{OMS}{cmsy}{m}{n} 
+%\makeatother
+
+\usepackage{newunicodechar}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Typesetting %%%
+
+% Brings to LaTeX micro-typographic extensions that were introduced by pdfTEX, e.g. character protrusion and font expansion.
+\RequirePackage{microtype}
+
+% Provides commands for case conversion ignoring mathematics sections
+\RequirePackage{textcase}
+% Provides a "multicols" environment which typesets text in multiple columns.
+\RequirePackage{multicol}
+
+% Provides extra tools for typesetting page headers and footers
+\RequirePackage{fancyhdr}
+
+\RequirePackage[absolute]{textpos}
+
+% allows the to user select any font size; it might be Useful to resolve some font size issues.
+\RequirePackage{anyfontsize}
+
+% Set the font size relative to the current font size
+\RequirePackage{relsize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[inline]{enumitem}
+\RequirePackage{xspace}
+\RequirePackage{graphicx}
+\RequirePackage{ifthen}
+%\RequirePackage{wasysym}
+\RequirePackage{pifont} % aggiunge dingbat per itemize
+\RequirePackage{array}
+\RequirePackage{afterpage}
+\RequirePackage{varioref}
+\RequirePackage{lettrine}
+
+\RequirePackage[bottom]{footmisc}
+
+\RequirePackage{multirow}
+\RequirePackage{datetime}
+
+\RequirePackage{ragged2e}
+\RequirePackage{nicefrac}
+\RequirePackage{tabularx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% LaTeX programming %%%
+
+% Provides programming facilities geared primarily towards LATEX class and package authors. (Theoremozzo)
+\RequirePackage{etoolbox}
+% Provides a high-level interface for producing document-level commands and parsing
+\RequirePackage{xparse}
+% Provides macros manipulating strings of tokens
+\RequirePackage{xstring}
+% Serves as a wrapper for other packages that make up the LATEX3
+\RequirePackage{expl3}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Graphics, diagrams and color %%%
+
+% Provides easy driver-independent access to several kinds of color tints, shades, tones, and mixes of arbitrary colors
+\RequirePackage[rgb,hyperref,dvipsnames]{xcolor}
+
+\RequirePackage{tikz}
+\usetikzlibrary{calc,angles,positioning,intersections,quotes,arrows,decorations.pathreplacing,graphs,decorations.pathmorphing,decorations.markings,fit,matrix,bending}
+
+% Provides tools for drawing high-quality function plots in normal or logarithmic scaling with a user-friendly interface directly in TeX.
+\usepackage{pgfplots}
+
+%\RequirePackage{parskip}
+
+%\setlength{\parskip}{0.75ex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Physics stuff %%%
+\RequirePackage{letltxmacro}
+\RequirePackage{siunitx} % provides SI units
+\LetLtxMacro{\svqty}{\qty}
+%\RequirePackage[arrowdel]{physics} %diffcoef instead? % provides bold vector with arrow above
+\LetLtxMacro{\qty}{\svqty}
+
+\sisetup{output-decimal-marker = {,}}
+
+\usepackage{animate}
+
+\usepackage[americanvoltages]{circuitikz}
+
+\RequirePackage{empheq}
+
+% Provides a "cancel" command to create an handwritten diagonal strikethrough text.
+\RequirePackage[thicklines]{cancel}
+
+\RequirePackage{nameref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Environment and theorems %%%
+
+% Provides an environment for coloured and framed text boxes with a heading line. (theoremozzo)
+\RequirePackage[most]{tcolorbox}
+% Provides framed environments that can split at page boundaries. (theoremozzo)
+\RequirePackage[framemethod=default]{mdframed}
+% Provides several packages for commonly-needed support for typesetting theorems. (theoremozzo)
+\RequirePackage{thmtools}
+% Enables the user to typeset programs (programming code)
+\RequirePackage{listings}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{makeidx}
+
+\RequirePackage{environ}
+\RequirePackage{xkeyval}
+%\RequirePackage{alphalph}
+\RequirePackage{tikz-cd}
+
+% Provides expressions to perform arithmetic on the arguments of the LaTeX commands \setcounter, \addtocounter, \setlength, and \addtolength
+\RequirePackage{calc}
+
+\RequirePackage{pdfpages}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Quote packages %%%
+
+% Provides advanced functions for inline and display quotations
+\RequirePackage{csquotes} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% OTHERS %%%
+
+% This package lets you typeset keywords of the version control system Subversion inside your LATEX files anywhere you like. Unlike the otherwise similar package svn the use of multiple files for one LATEX document is well supported.
+\RequirePackage{svn-multi}
+
+% provides some neat stuff for commutative diagrams (contains several packages inside); to be used with https://q.uiver.app "Export to LaTeX".
+\RequirePackage{preamble/quiver}
+
+% provides the comment environment for multiline comments.
+\RequirePackage{preamble/comment}
+
+% Provides 
+\RequirePackage{preamble/nexus}
+
+\RequirePackage{float}
+
+% generates dummy text (lorem ipsum) to demonstrate the visual form of a document without relying on meaningful content
+\usepackage{lipsum}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Handwritten packages %%%
+
+\usepackage{preamble/theoremozzo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Hyperlinks %%%
+
+% Handle cross-referencing commands in LaTeX to produce hypertext links in the document
+% NOTE: Always load hyperref package last
+\RequirePackage{hyperref}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    GLOBAL TOGGLES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\newtoggle{noDefinition}
+%\newtoggle{noTheorem}
+%\newtoggle{AppendixChapters}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    PACKAGE SETTINGS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% BibLaTeX
+\bibliography{appendix/bibliography.bib} % Specify file
+\defbibheading{appendix/bibliography.bib}{\bibsection} % Fix header problem
+
+% Hyperref: settings
+\hypersetup{
+	pdfborder={0 0 0},
+	colorlinks=true,
+	linkcolor=reddo,
+	anchorcolor=reddo,
+	citecolor=reddo,
+	filecolor=reddo,
+	menucolor=reddo,
+	runcolor=reddo,
+	urlcolor=reddo
+}
+
+% Memoir
+\abstractnum   % Format heading as chapter
+\abstractintoc % Include "Abstract" in ToC
+\newsubfloat{figure} % Creates commands for subfigures
+\newsubfloat{table} % Creates commands for subtables
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    LENGTHS AND PAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lengths
+\newlength{\listAllLeftMarginI}
+\setlength{\listAllLeftMarginI}{2\parindent}
+\newlength{\listItemizeLeftMarginI}
+\setlength{\listItemizeLeftMarginI}{\listAllLeftMarginI}
+\newlength{\listItemizeLeftMarginII}
+\setlength{\listItemizeLeftMarginII}{\parindent}
+\newlength{\listEnumerateLeftMarginI}
+\setlength{\listEnumerateLeftMarginI}{\listAllLeftMarginI}
+\newlength{\listEnumerateLeftMarginII}
+\setlength{\listEnumerateLeftMarginII}{\parindent}
+\addtolength{\listEnumerateLeftMarginII}{4pt}
+\newlength{\listTopSep}
+\setlength{\listTopSep}{0pt}
+\newlength{\listParSep}
+\setlength{\listParSep}{0pt}
+\newlength{\listLabelSep}
+\setlength{\listLabelSep}{1em}
+\newlength{\listItemSep}
+\setlength{\listItemSep}{0.5\baselineskip}
+% Labels
+\newcommand{\listItemizeLabelI}{\raisebox{0.1ex}{\tiny\ding{110}}}
+\newcommand{\listItemizeLabelII}{$\diamond$}
+\newcommand{\listEnumerateLabelI}{{\arabic*}.}
+\newcommand{\listEnumerateRefI}{{\arabic*}}
+\newcommand{\listEnumerateLabelII}{{\alph*}.}
+\newcommand{\listEnumerateRefII}{{\alph*}}
+\newcommand{\listInlineEnumerateLabel}{({\roman*})}
+% Global list settings
+\setlist{%
+	noitemsep,
+	topsep=\listTopSep,
+	parsep=\listParSep,
+	leftmargin=\listAllLeftMarginI,
+	labelsep=\listLabelSep,
+}
+\setlist[itemize, 1]{%
+	label=\listItemizeLabelI,
+}
+\setlist[itemize, 2]{%
+	label=\listItemizeLabelII,
+	leftmargin=\listItemizeLeftMarginII,
+}
+\setlist[enumerate, 1]{%
+	label=\listEnumerateLabelI,
+	ref=\listEnumerateRefI,
+}
+\setlist[enumerate, 2]{%
+	label=\listEnumerateLabelII,
+	ref=\listEnumerateRefII,
+	leftmargin=\listEnumerateLeftMarginII,
+}
+% Texts
+\newenvironment{introduction}
+{%
+	\begin{minipage}{\textwidth}%
+		\itshape%
+	}
+	{%
+	\end{minipage}%
+	\par\addvspace{2\baselineskip plus 0.2\baselineskip minus 0.2\baselineskip}%
+}
+%% Parts
+\newcommand{\labelPart}[1]{%
+	% #1 = label
+	\label{chap:#1}%
+}
+\newcommand{\refPart}[1]{%
+	% #1 = reference
+	Part~\vref{chap:#1}\xspace%
+}
+\newcommand{\refPartOnly}[1]{% Doesn't include the page referencing
+	% #1 = reference
+	Part~\ref{chap:#1}\xspace%
+}
+%% Chapters
+%\newcommand{\labelChapter}[1]{%
+%	% #1 = label
+%	\label{chap:#1}%
+%	\toggletrue{noDefinition}
+%	\toggletrue{noTheorem}
+%}
+\newcommand{\refChapter}[1]{%
+	% #1 = reference
+	Capitolo~\vref{chap:#1}\xspace%
+}
+\newcommand{\refChapterOnly}[1]{% Doesn't include the page referencing
+	% #1 = reference
+	Capitolo~\ref{chap:#1}\xspace%
+}
+%% Sections
+\newcommand{\labelSection}[1]{%
+	% #1 = label
+	\label{sec:#1}%
+}
+\newcommand{\refSection}[1]{%
+	% #1 = reference
+	Section~\vref{sec:#1}\xspace%
+}
+\newcommand{\refSectionOnly}[1]{% Doesn't include the page referencing
+	% #1 = reference
+	Section~\ref{sec:#1}\xspace%
+}
+%% Appendices
+%\newcommand{\labelAppendix}[1]{%
+%	% #1 = label
+%	\label{appen:#1}%
+%	\toggletrue{AppendixChapters}
+%}
+\newcommand{\refAppendix}[1]{%
+	% #1 = reference
+	Appendix~\vref{appen:#1}\xspace%
+}
+\newcommand{\refAppendixOnly}[1]{% Doesn't include the page referencing
+	% #1 = reference
+	Appendix~\ref{appen:#1}\xspace%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    DOCUMENT CUSTOMIZATIONS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{preamble/documentcustomization}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    CUSTOM ENVIRONMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\input{preamble/theoremenvironment.sty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    CUSTOM COMMANDS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{preamble/commandozzo}
+\usepackage{preamble/othercommands}

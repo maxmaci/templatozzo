@@ -1,0 +1,586 @@
+% SVN info for this file
+\svnidlong
+{$HeadURL$}
+{$LastChangedDate$}
+{$LastChangedRevision$}
+{$LastChangedBy$}
+
+\chapter{Comandi personalizzati}
+\labelChapter{CustomCommands}
+\begin{introduction}
+	``...''
+	\begin{flushright}
+		\textscsl{John Milnor}
+	\end{flushright}
+\end{introduction}
+\lettrine[findent=1pt, nindent=0pt]{I}{n questo} capitolo sono elencati tutti i comandi personalizzati e i loro output, con alcuni commenti addizionali sul loro Modalità d'uso, il loro scopo ed altre osservazioni.
+\section{Comandi generici per \LaTeX}
+\paragraph{\textbackslash underbfsf}
+\begin{equation*}
+	\underbfsf{testo}
+\end{equation*}
+\textbf{\textit{Descrizione:}} testo in grassetto, sans serif e sottolineato.\\
+\textbf{\textit{Modalità d'uso:}}
+\begin{itemize}
+	\item \inlinecode{\#1} è il testo.
+\end{itemize}
+\begin{codelatex}
+\underbfsf{#1}
+\end{codelatex}
+\begin{example}{}
+	La categoria $\underbfsf{Set}$ ha come oggetti gli insiemi: se sapete l'inglese, è un fatto \underbfsf{ovvio}.
+\end{example}
+\begin{codelatex}
+La categoria $\underbfsf{Set}$ ha come oggetti gli insiemi: se sapete l'inglese, è un fatto \underbfsf{ovvio}.
+\end{codelatex}
+\paragraph{\textbackslash Dfrac}
+\begin{equation*}
+	\Dfrac{numeratore}{denominatore}
+\end{equation*}
+\textbf{\textit{Descrizione:}} frazione con numeratore e denominatore in \inlinecode{\textbackslash displaystyle}.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} è il numeratore;
+	\item \inlinecode{\#2} è il denominatore;
+\end{itemize}
+\begin{codelatex}
+\Dfrac{#1}{#2}
+\end{codelatex}
+\begin{example}{}
+	Data una $n$-upla di elementi $(x_i)_i$ con pesi associati (non negativi) $(w_i)_i$, la media ponderata è \begin{equation*}
+		\overline{x}=\Dfrac{\sum_{i=1}^{n}w_ix_i}{\sum_{i=1}^{n}w_i}.
+	\end{equation*}
+\end{example}
+\begin{codelatex}
+Data una $n$-upla di elementi $(x_i)_i$ con pesi associati (non negativi) $(w_i)_i$, la media ponderata è
+\begin{equation*}
+	\overline{x}=\Dfrac{\sum_{i=1}^{n}w_ix_i}{\sum_{i=1}^{n}w_i}.
+\end{equation*}
+\end{codelatex}
+\section{Comandi utili per dimostrazioni}
+\paragraph{\textbackslash rightimplies, \textbackslash leftimplies}
+\begin{equation*}
+	\rightimplies\qquad\qquad\leftimplies
+\end{equation*}
+\textbf{\textit{Descrizione:}} un'implicazione destra e sinistra con parentesi tonda e spazio incluso.\\
+\textbf{\textit{Modalità d'uso:}} nessun argomento aggiuntivo.\\
+\textbf{\textit{Scopo:}} per indicare quale direzione di una doppia implicazione $(\iff)$ si sta dimostrando.\\
+\textbf{\textit{Osservazioni:}} per motivi a me al momento sconosciuti, se si usano questi comandi nella prima riga degli environment senza l'opzione \inlinecode{nonewline} c'è una piccola e fastidiosa indentazione; al momento, per risolvere tale bug è necessario passare l'opzione \inlinecode{n} (\textit{no new line}) e indurre manualmente un \textit{a capo} iniziale con \inlinecode{$\sim$\{\}\textbackslash\textbackslash}.%TODO: correggere il bug, creare il comando per ~{}\\.
+\begin{example}{}[Non allineato]
+\rightimplies ...\\
+\leftimplies ...
+\end{example}
+\begin{codelatex}[Non allineato]
+\begin{example}{}[Non allineato]
+	\rightimplies ...\\
+	\leftimplies ...
+\end{example}
+\end{codelatex}
+\begin{example}{n}[Allineato]
+	~{}\\
+	\rightimplies ...\\
+	\leftimplies ...
+\end{example}
+\begin{codelatex}[Allineato]
+\begin{example}{n}[Allineato]
+~{}\\
+\rightimplies ...\\
+\leftimplies ...
+\end{example}
+\end{codelatex}
+\paragraph{\textbackslash rightinclude, \textbackslash leftinclude}
+\begin{equation*}
+	\rightinclude\qquad\qquad\leftinclude
+\end{equation*}
+\textbf{\textit{Descrizione:}} un'inclusione destra e sinistra con parentesi tonda e spazio incluso.\\
+\textbf{\textit{Modalità d'uso:}} nessun argomento aggiuntivo.\\
+\textbf{\textit{Scopo:}} per indicare quale inclusione di un'uguaglianza si sta dimostrando.
+\begin{example}{}
+	\rightinclude ...\\
+	\leftinclude ...
+\end{example}
+\begin{codelatex}
+\rightinclude ...\\
+\leftinclude ...
+\end{codelatex}
+\paragraph{\textbackslash viff}
+\begin{equation*}
+	\viff
+\end{equation*}
+\textbf{\textit{Descrizione:}} una doppia implicazione \inlinecode{\textbackslash iff} $(\iff)$ verticale.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.\\
+\textbf{\textit{Scopo:}} per doppie implicazioni con enunciati su più linee.
+\begin{example}{n}
+	\begin{equation*}
+		\begin{array}{c}
+			...\\
+			\viff\\
+			...
+		\end{array}
+	\end{equation*}
+\end{example}
+\begin{codelatex}
+\begin{equation*}
+	\begin{array}{c}
+		...\\
+		\viff\\
+		...
+	\end{array}
+\end{equation*}
+\end{codelatex}
+\section{Insiemi numerici e lettere}
+\paragraph{\textbackslash N, \textbackslash Z, \textbackslash Q, \textbackslash R, \textbackslash Irr, \textbackslash C, \textbackslash Hb, \textbackslash Ob, \textbackslash Sb, \textbackslash K, \textbackslash F, \textbackslash kac, \textbackslash A}
+\begin{equation*}
+	\N\quad\Z\quad\Q\quad\R\quad\Irr\quad\C\quad\Hb\quad\Ob\quad\Sb\quad\K\quad\F\quad\kac\quad\A
+\end{equation*}
+\textbf{\textit{Descrizione:}} insiemi numerici e campi algebrici importanti.
+\begin{multicols}{2}
+	\begin{itemize}
+		\item $\N$: numeri naturali;
+		\item $\Z$: numeri interi;
+		\item $\Q$: numeri razionali;
+		\item $\R$: numeri reali;
+		\item $\Irr$: numeri irrazionali;
+		\item $\C$: numeri complessi;
+		\item $\Hb$: quaternioni;
+		\item $\Ob$: ottonioni;
+		\item $\Sb$: sedenioni;
+		\item $\K$: campo generico;
+		\item $\F$: campo finito;
+		\item $\kac$: campo algebricamente chiuso;
+		\item $\A$: numero algebrico.
+	\end{itemize}
+\end{multicols}
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\N\quad\Z\quad\Q\quad\R\quad\Irr\quad\C\quad\Hb\quad\Ob\quad\Sb\quad\K\quad\F\quad\kac\quad\A$
+\end{codelatex}
+\paragraph{\textbackslash epsilon, \textbackslash varepsilon}
+\begin{equation*}
+	\epsilon\qquad\varepsilon
+\end{equation*}
+\textbf{\textit{Descrizione:}} epsilon.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.\\
+\textbf{\textit{Osservazioni:}} scambia la definizione originale di \inlinecode{\textbackslash epsilon} con quella di \inlinecode{\textbackslash varepsilon}, dato che è un simbolo più ``\textit{carino}''.
+\begin{codelatex}
+$\epsilon\qquad\varepsilon$
+\end{codelatex}
+\paragraph{\textbackslash phi, \textbackslash varphi}
+\begin{equation*}
+	\phi\qquad\varphi
+\end{equation*}
+\textbf{\textit{Descrizione:}} phi.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.\\
+\textbf{\textit{Osservazioni:}} scambia la definizione originale di \inlinecode{\textbackslash phi} con quella di \inlinecode{\textbackslash varphi}, dato che è un simbolo più ``\textit{carino}''.
+\begin{codelatex}
+$\phi\qquad\varphi$
+\end{codelatex}
+\section{Logica}
+\subsection{Teoria degli insiemi}
+\paragraph{\textbackslash Set}
+\begin{equation*}
+	\Set{1,2,3,\ldots}\qquad\Set{x\in A | \ldots}
+\end{equation*}
+\textbf{\textit{Descrizione:}} insieme per elencazione o per caratteristica.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} sono gli elementi;
+	\item \inlinecode{\#2} \textit{(opzionale)} è la proprietà che caratterizza degli elementi.
+\end{itemize}
+\begin{codelatex}
+$\Set{#1}$
+$\Set{#1 | #2}$
+\end{codelatex}
+\begin{example}{}
+	I primi sono $\Set{2,3,5,7,11,13,17,19,23,\ldots}$.\\
+	Data una base $\Set{v_1,\ldots,v_n}$, un reticolo in $\R^n$ è $\displaystyle\Lambda=\Set{\sum_{i=1}^na_iv_i | a_i\in\Z}$.
+\end{example}
+\begin{codelatex}
+I primi sono $\Set{2,3,5,7,11,13,17,19,23,\ldots}$.\\
+Data una base $\Set{v_1,\ldots,v_n}$, un reticolo in $\R^n$ è $\displaystyle\Lambda=\Set{\sum_{i=1}^na_iv_i | a_i\in\Z}$.\end{codelatex}
+\paragraph{\textbackslash emptyset, \textbackslash varemptyset}
+\begin{equation*}
+	\emptyset\qquad\qquad\varemptyset
+\end{equation*}
+\textbf{\textit{Descrizione:}} insieme vuoto.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.\\
+\textbf{\textit{Osservazioni:}} scambia la definizione originale di \inlinecode{\textbackslash emptyset} con quella di \inlinecode{\textbackslash varnothing}, dato che è un simbolo più tondo e ``\textit{carino}''; il vecchio simbolo per \inlinecode{\textbackslash emptyset} è diventato \inlinecode{\textbackslash varemptyset}. A seconda del font in uso i due simboli potrebbero essere praticamente identici.
+\begin{codelatex}
+	$\emptyset\qquad\qquad\varemptyset$
+\end{codelatex}
+\paragraph{\textbackslash powerset}
+\begin{equation*}
+	\powerset{X}
+\end{equation*}
+\textbf{\textit{Descrizione:}} insieme delle parti di un insieme $X$.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} è l'insieme (interno alle parentesi) di cui si vuol scrivere l'insieme delle parti.
+\end{itemize}
+\begin{codelatex}
+$\powerset{#1}$
+\end{codelatex}
+\begin{example}{}
+	Se $X=\{x,y,z\}$, allora $\powerset{X}=\Set{\emptyset,\{x\},\{y\},\{z\},\{x,y\},\{x,z\},\{y,z\},\{x,y,z\}}$.
+\end{example}
+\begin{codelatex}
+Se $X=\{x,y,z\}$, allora $\powerset{X}=\Set{\emptyset,\{x\},\{y\},\{z\},\{x,y\},\{x,z\},\{y,z\},\{x,y,z\}}$.
+\end{codelatex}
+\section{Algebra}
+\subsection{Teoria delle categorie}
+\paragraph{\textbackslash cat}
+\begin{equation*}
+	\cat
+\end{equation*}
+\textbf{\textit{Descrizione:}} categoria.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\cat$
+\end{codelatex}
+\paragraph{\textbackslash ob}
+\begin{equation*}
+	\ob
+\end{equation*}
+\textbf{\textit{Descrizione:}} oggetti.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+	$\ob$
+\end{codelatex}
+\paragraph{\textbackslash obj}
+\begin{equation*}
+	\obj{\cat}
+\end{equation*}
+\textbf{\textit{Descrizione:}} oggetti di una categoria $\cat$.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} è la categoria a cui appartengono gli oggetti;
+\end{itemize}
+\begin{codelatex}
+$\obj{#1}$
+\end{codelatex}
+\textbf{\textit{Osservazioni:}} si basa sull'operatore \inlinecode{\textbackslash ob} $(\ob)$.
+\begin{example}{}
+Gli oggetti $\obj{\underbfsf{Ab}}$ sono i gruppi abeliani.
+\end{example}
+\begin{codelatex}
+Gli oggetti $\obj{\underbfsf{Ab}}$ sono i gruppi abeliani.
+\end{codelatex}
+\paragraph{\textbackslash homo}
+\begin{equation*}
+	\homo{X,Y}\qquad\homo[\cat]{X,Y}\qquad\homo{\cat}
+\end{equation*}
+\textbf{\textit{Descrizione:}} classe degli morfismi tra oggetti $X$ e $Y$ di una categoria $\cat$ - o classe di tutti i morfismi di una categoria $\cat$\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} \textit{(opzionale)} è la categoria a cui appartengono i morfismi;
+	\item \inlinecode{\#2} è il dominio e codominio dei morfismi o la categoria a cui appartengono i morfismi;
+\end{itemize}
+\begin{codelatex}
+$\homo[#1]{#2}$
+\end{codelatex}
+\textbf{\textit{Osservazioni:}} si basa sull'operatore \inlinecode{\textbackslash hom} $(\hom)$.
+Si può utilizzare per insiemi di morfismi anche non esplicitamente categoriali, come gli omomorfismi tra gruppi.
+\begin{example}{}
+	I morfismi in $\homo[\cat]{X,Y}$ sono chiamati \textit{frecce} da $X$ a $Y$.
+\end{example}
+\begin{codelatex}
+I morfismi in $\homo[\cat]{X,Y}$ sono chiamati anche \textit{frecce} da $X$ a $Y$.
+\end{codelatex}
+\subsection{Gruppi classici}
+\paragraph{\textbackslash GL, \textbackslash SL, \textbackslash Or, \textbackslash SO, \textbackslash E, \textbackslash SE, \textbackslash U, \textbackslash SU, \textbackslash Sp, \textbackslash US}
+\begin{equation*}
+	\GL\quad\SL\quad\Or\quad\SO\quad\E\quad\SE\quad\U\quad\SU\quad\Sp\quad\US
+\end{equation*}
+\textbf{\textit{Descrizione:}} gruppi matriciali classici e loro quozienti.
+\begin{multicols}{2}
+	\begin{itemize}
+		\item $\GL$: gruppo generale lineare;
+		\item $\SL$: gruppo lineare speciale;
+		\item $\Or$: gruppo ortogonale;
+		\item $\SO$: gruppo ortogonale speciale;
+		\item $\E$: gruppo euclideo;
+		\item $\SE$: gruppo euclideo speciale;
+		\item $\U$: gruppo unitario;
+		\item $\SU$: gruppo unitario speciale;
+		\item $\Sp$: gruppo simplettico;
+		\item $\US$: gruppo simplettico compatto;
+	\end{itemize}
+\end{multicols}
+%TODO: add projective generale linear group
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\GL\quad\SL\quad\Or\quad\SO\quad\E\quad\SE\quad\U\quad\SU\quad\Sp\quad\US$
+\end{codelatex}
+\subsection{Funzioni}
+\paragraph{\textbackslash funct}
+\begin{gather*}
+	\funct{}{X}{Y}\qquad\funct{}{X}{Y}[x][y]\qquad\funct{}[f]{X}{Y}\qquad
+	\funct{}[f]{X}{Y}[x][y]\\
+	\funct{s}{X}{Y}\qquad\funct{s}{X}{Y}[x][x]\qquad\funct{s}[f]{X}{Y}\qquad
+	\funct{s}[f]{X}{Y}[x][x]\\
+	\funct{i}{X}{Y}\qquad\funct{i}{X}{Y}[x][x]\qquad\funct{i}[\iota]{X}{Y}\qquad
+	\funct{i}[\iota]{X}{Y}[x][x]
+\end{gather*}
+\textbf{\textit{Descrizione:}} funzione $f$ tra $X$ e $Y$ che manda $x$ in $y$.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} è l'opzione sul \textit{tipo} di funzione:
+	\begin{itemize}
+		\item Nessuno (o qualunque altro simbolo eccetto i successivi): funzione generica.
+		\item \inlinecode{s}: funzione suriettiva;
+		\item \inlinecode{i}: inclusione;
+	\end{itemize}
+	\item \inlinecode{\#2} \textit{(opzionale)} è il nome della funzione;
+	\item \inlinecode{\#3} è il dominio della funzione;
+	\item \inlinecode{\#4} è il codominio della funzione;
+	\item \inlinecode{\#5} \textit{(opzionale)} è l'elemento in input;
+	\item \inlinecode{\#6} \textit{(obbligatorio se è presente} \inlinecode{\#5}\textit{, altrimenti è opzionale)} è l'elemento in output.
+\end{itemize}
+\textbf{\textit{Osservazioni:}} \inlinecode{\textbackslash funct} può essere utilizzata a sua volta negli argomenti \inlinecode{\#5} e \inlinecode{\#6}.\\ %TODO: evitare il nesting in #1, #2 e #3?
+\begin{codelatex}
+$\funct{#1}[#2]{#3}{#4}[#5][#6]$
+\end{codelatex}
+\begin{codelatex}
+\begin{gather*}
+	\funct{}{X}{Y}\qquad\funct{}{X}{Y}[x][y]\qquad\funct{}[f]{X}{Y}\qquad
+	\funct{}[f]{X}{Y}[x][y]\\
+	\funct{s}{X}{Y}\qquad\funct{s}{X}{Y}[x][x]\qquad\funct{s}[f]{X}{Y}\qquad
+	\funct{s}[f]{X}{Y}[x][x]\\
+	\funct{i}{X}{Y}\qquad\funct{i}{X}{Y}[x][x]\qquad\funct{i}[\iota]{X}{Y}\qquad
+	\funct{i}[\iota]{X}{Y}[x][x]
+\end{gather*}
+\end{codelatex}
+\section{Geometria}
+\subsection{Algebra lineare}
+\paragraph{\textbackslash rk}
+\begin{equation*}
+	\rk A
+\end{equation*}
+\textbf{\textit{Descrizione:}} rango di una matrice.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.\\
+\begin{codelatex}
+$\rk$
+\end{codelatex}
+\paragraph{\textbackslash codim}
+\begin{equation*}
+	\codim A
+\end{equation*}
+\textbf{\textit{Descrizione:}} codimensione di uno spazio vettoriale.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\codim$
+\end{codelatex}
+\paragraph{\textbackslash img}
+\begin{equation*}
+\img A
+\end{equation*}
+\textbf{\textit{Descrizione:}} immagine di un operatore.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\img$
+\end{codelatex}
+\paragraph{\textbackslash trc}
+\begin{equation*}
+	\trc A
+\end{equation*}
+\textbf{\textit{Descrizione:}} traccia di una matrice.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\trc$
+\end{codelatex}
+\subsection{Geometria Euclidea}
+\begin{equation*}
+	AB \slantparallel CD
+\end{equation*}
+\textbf{\textit{Descrizione:}} due rette $AB$ e $CD$ parallele.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\parallel$
+\end{codelatex}
+\subsection{Topologia}
+\paragraph{\textbackslash topo}
+\begin{equation*}
+	\topo
+\end{equation*}
+\textbf{\textit{Descrizione:}} topologia.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.\\
+\textbf{\textit{Osservazioni:}} è una $T$ calligrafica che forza l'utilizzo del font \inlinecode{Computer Modern} anche quando il font calligrafico è stato modificato, come in questo documento.
+\begin{codelatex}
+$\topo$
+\end{codelatex}
+\paragraph{\textbackslash eucl}
+\begin{equation*}
+	\eucl
+\end{equation*}
+\textbf{\textit{Descrizione:}} topologia euclidea.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\eucl$
+\end{codelatex}
+\paragraph{\textbackslash basis}
+\begin{equation*}
+	\basis
+\end{equation*}
+\textbf{\textit{Descrizione:}} base di una topologia.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\basis$
+\end{codelatex}
+\paragraph{\textbackslash interior}
+\begin{equation*}
+	\interior{A}
+\end{equation*}
+\textbf{\textit{Descrizione:}} interno di un insieme.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} è l'insieme di cui si vuol scrivere l'interno.
+\end{itemize}
+\begin{codelatex}
+$\interior{#1}$
+\end{codelatex}
+\begin{example}{}
+	Se un insieme $A$ è aperto, $\interior{A}=A$.
+\end{example}
+\begin{codelatex}
+Se un insieme $A$ è aperto, $\interior{A}=A$.
+\end{codelatex}
+\paragraph{\textbackslash unint}
+\begin{equation*}
+	\unint
+\end{equation*}
+\textbf{\textit{Descrizione:}} intervallo unitario.\\
+\noindent\textbf{\textit{Modalità d'uso:}} ambiente matematico, nessun argomento aggiuntivo.
+\begin{codelatex}
+$\unint$
+\end{codelatex}
+\section{Topologia algebrica}
+\paragraph{\textbackslash homotopy}
+\begin{equation*}
+	\homotopy{X,x_0}\qquad\homotopy[q]{X,x_0}\qquad\homotopy{X}\qquad\homotopy[q]{X}
+\end{equation*}
+\textbf{\textit{Descrizione:}} gruppo di omotopia (superiore) o gruppo fondamentale di uno spazio topologico $X$, eventualmente puntato in $x$.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} \textit{(opzionale)} è l'ordine del gruppo di omotopia;
+	\item \inlinecode{\#2} è lo spazio topologico (eventualmente puntato) di cui calcolare il gruppo di omotopia;
+\end{itemize}
+\begin{codelatex}
+	$\homotopy[#1]{#2}$
+\end{codelatex}
+\begin{example}{}
+	Il gruppo fondamentale della sfera è $\homotopy[1]{S^2,1}=0$.
+\end{example}
+\begin{codelatex}
+Il gruppo fondamentale della sfera è $\homotopy[1]{S^2,1}=0$.
+\end{codelatex}
+\paragraph{\textbackslash homology}
+\begin{equation*}
+	\homology{X}\qquad\homology[q]{X}
+\end{equation*}
+\textbf{\textit{Descrizione:}} gruppo di omologia di uno spazio topologico $X$\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} \textit{(opzionale)} è l'ordine del gruppo di omologia;
+	\item \inlinecode{\#2} è lo spazio topologico (o opportuno oggetto topologico) di cui calcolare il gruppo di omologia;
+\end{itemize}
+\begin{codelatex}
+	$\homology[#1]{#2}$
+\end{codelatex}
+\begin{example}{}
+	Il gruppo di omologia singolare della sfera $n$-dimensionale è $\homotopy[q]{S^n,1}=\Z$ se $q=0$ o $n$, altrimenti è $0$.
+\end{example}
+\begin{codelatex}
+Il gruppo di omologia singolare della sfera $n$-dimensionale è $\homotopy[q]{S^n,1}=\Z$ se $q=0$ o $n$, altrimenti è $0$.
+\end{codelatex}
+\paragraph{\textbackslash deRham}
+\begin{equation*}
+	\deRham{M}\qquad\deRham[q]{M}
+\end{equation*}
+\textbf{\textit{Descrizione:}} gruppo di coomologia di De Rham di una varietà differenziabile $M$\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} \textit{(opzionale)} è l'ordine del gruppo di coomologia di De Rham;
+	\item \inlinecode{\#2} è la varietà differenziabile di cui calcolare il gruppo di coomologia;
+\end{itemize}
+\begin{codelatex}
+	$\deRham[#1]{#2}$
+\end{codelatex}
+\begin{example}{}
+	Il gruppo di coomologia di De Rham della sfera $n$-dimensionale è $\deRham[q]{S^n,1}=\R$ se $q=0$ o $n$, altrimenti è $0$.
+\end{example}
+\begin{codelatex}
+Il gruppo di coomologia di De Rham della sfera $n$-dimensionale è $\deRham[q]{S^n,1}=\R$ se $q=0$ o $n$, altrimenti è $0$.
+\end{codelatex}
+\section{Matematiche complementari} %TODO: don't have commands?
+\section{Analisi matematica}
+\paragraph{\textbackslash abs, \textbackslash norm}
+\begin{equation*}
+	\abs{\dots}\qquad\norm{\dots}
+\end{equation*}
+\textbf{\textit{Descrizione:}} valore assoluto (e norma) di un'espressione.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} è l'espressione di cui si vuol prendere il valore assoluto (o norma).
+\end{itemize}
+\begin{codelatex}
+$\abs{#1}$
+$\norm{#1}$
+\end{codelatex}
+\textbf{\textit{Osservazioni:}} l'altezza delle parentesi cambia in base al contenuto di \inlinecode{\#1}.
+\begin{example}{}
+Un esempio di funzione non integrabile secondo Lebesgue è $\frac{\sin x}{x}$, in quanto
+\begin{equation*}
+	\int_{+\infty}^{+\infty}\abs{\frac{\sin x}{x}}dx=+\infty.
+\end{equation*}
+I vettori unitari hanno norma $\norm{\mathbf{x}}=1$.
+\end{example}
+\begin{codelatex}
+Un esempio di funzione non integrabile secondo Lebesgue è $\nicefrac{\sin x}{x}$, in quanto
+\begin{equation*}
+	\int_{+\infty}^{+\infty}\abs{\frac{\sin x}{x}}dx=+\infty.
+\end{equation*}
+I vettori unitari hanno norma $\norm{\mathbf{x}}=1$.
+\end{codelatex}
+\paragraph{\textbackslash ceil, \textbackslash floor}
+\begin{equation*}
+	\floor{\dots}\qquad\ceil{\dots}
+\end{equation*}
+\textbf{\textit{Descrizione:}} funzione \textit{floor} (o parte intera) e funzione \textit{ceiling} di un'espressione.\\
+\textbf{\textit{Modalità d'uso:}} ambiente matematico;
+\begin{itemize}
+	\item \inlinecode{\#1} è l'espressione di cui si vuol fare il floor/parte intera o ceiling.
+\end{itemize}
+\begin{codelatex}
+	$\floor{#1}$
+	$\ceil{\dots}$
+\end{codelatex}
+\textbf{\textit{Osservazioni:}} l'altezza delle parentesi cambia in base al contenuto di \inlinecode{\#1}.
+\begin{example}{}
+	L'operazione \textit{modulo} può essere espressa come $\displaystyle x\mod y=x-y\floor{\frac{x}{y}}$.\\
+	Il numero di cifre in base $b$ di un intero positivo $k$ è $\floor{\log_b k}+1=\ceil{\log_b(k+1)}$.
+\end{example}
+\begin{codelatex}
+L'operazione $\mod$ può essere espressa come $\displaystyle x\mod y=x-y\floor{\frac{x}{y}}$.\\
+Il numero di cifre in base $b$ di un intero positivo $k$ è $\floor{\log_b k}+1=\ceil{\log_b(k+1)}$.
+\end{codelatex}
+\section{Probabilità e statistica matematica}
+\section{Fisica e Fisica matematica}
+\paragraph{\textbackslash fem}
+\begin{equation*}
+	\fem
+\end{equation*}
+\textbf{\textit{Descrizione:}} forza elettromotrice.\\
+\noindent\textbf{\textit{Modalità d'uso:}} nessun argomento aggiuntivo.
+\begin{codelatex}
+\fem
+\end{codelatex}
+\paragraph{\textbackslash ddp}
+\begin{equation*}
+	\ddp
+\end{equation*}
+\textbf{\textit{Descrizione:}} differenza di potenziale.\\
+\noindent\textbf{\textit{Modalità d'uso:}} nessun argomento aggiuntivo.
+\begin{codelatex}
+	\ddp
+\end{codelatex}
+\section{Analisi numerica}
