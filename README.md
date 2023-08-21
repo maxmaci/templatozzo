@@ -1,6 +1,4 @@
-# Templetozzo:tm:
-Author: Massimo Bertolotti
-
+# Templatozzo:tm:
 This work is licensed under a CC Attribution-NonCommercial-ShareAlike 4.0 International.
 
 ## Alpha 0.0.1
